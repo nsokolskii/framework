@@ -2,6 +2,16 @@
 
 <?php
 echo sprintf("
+<div align='center'>
+<div class='header'>
+<div align='left'>
+<a href='%s'>< go back</a>
+</div>
+</div>
+</div>
+", 
+$backPath);
+echo sprintf("
 <div class='posthead' align='center'>
 <div class='postimage' style='background-image: url(%s%s);'>
 </div>

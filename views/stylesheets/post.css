@@ -2,13 +2,11 @@
     border-radius: 8px;
     width: auto;
     padding: 10px;
-    color: #000;
-    font-family: Helvetica;
 }
 
 .username {
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 700;
 }
 
 .comments {
@@ -42,8 +40,6 @@
 }
 
 .posthead {
-    margin-top:30px;
-    
     width:900px;
     margin-left: auto;
     margin-right: auto;
@@ -66,6 +62,7 @@
 body {
     font-family: 'Roboto', sans-serif;
     background-color: #f1f1f1;
+    color: #252525;
 }
 
 .header {
@@ -73,4 +70,13 @@ body {
     padding-top: 20px;
     padding-bottom: 10px;
     font-size:1.5em;
+    font-weight: 900;
+}
+
+.header a {
+    color: #575757;
+}
+.header a:hover {
+    color: #252525;
+    text-decoration: none;
 }

@@ -32,7 +32,8 @@ class SiteController extends Controller{
         $commentBlock->populate($id);
         $params = [
             'post' => $post->shot,
-            'comments' => $commentBlock->comments
+            'comments' => $commentBlock->comments,
+            'backPath' => '/browse'
         ];
         return $this->render('post', $params);
     }

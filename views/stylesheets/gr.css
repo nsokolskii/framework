@@ -1,0 +1,43 @@
+.wrapper > a > div {
+    border-radius: 8px;
+    height: 150px;
+    width: auto;
+    padding: 10px;
+    color: #fff;
+    font-family: Helvetica;
+    
+}
+
+a { 
+    text-decoration: none; /* Убираем подчеркивание у ссылок */
+   }
+   a:hover { 
+    text-decoration: none; /* Добавляем подчеркивание 
+                                   при наведении курсора мыши на ссылку */
+   }
+
+.wrapper > a > div > img {
+    padding-top: 10px;
+}
+
+.wrapper {
+    margin-top:30px;
+    width:900px;
+    margin-left: auto;
+    margin-right: auto;
+    align-content: space-between;
+    justify-content: space-around;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    font-family: Roboto;
+    font-weight: bold;
+}
+
+.browsetitle {
+    text-shadow:  0 0 10px rgba(0,0,0,0.3);
+}
+
+body {
+    background-color:#f1f1f1;
+}

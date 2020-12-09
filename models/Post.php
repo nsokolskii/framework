@@ -19,11 +19,11 @@ class Post extends DbModel{
     }
 
     public function attributes() : array {
-        return ['id', 'author', 'title', 'description', 'image'];
+        return ['shots.id', 'shots.author', 'shots.title', 'shots.description', 'shots.image', 'users.firstname'];
     }
 
     public function populate($id){
-        $sql = " WHERE id = $id";
+        $sql = " LEFT JOIN users ON shots.author = users.id WHERE shots.id = $id";
         try{
             $this->shot = $this->loadFromDb($sql)[0];
         }

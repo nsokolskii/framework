@@ -19,6 +19,9 @@ echo sprintf("
 <div class='posttitle'>
 %s
 </div>
+<div class='username'>
+%s
+</div>
 <div class='postdesc'>
 %s
 </div>
@@ -28,6 +31,7 @@ echo sprintf("
 '/runtime/img/',
 $post['image'],
 $post['title'],
+$post['author'],
 $post['description']
 );
 

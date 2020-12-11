@@ -16,6 +16,17 @@ class Field{
         $this->model = $model;
         $this->attribute = $attribute;
     }
+
+    public function labels(){
+        return [
+            'firstname' => 'Firstname',
+            'lastname' => 'Lastname',
+            'email' => 'E-mail',
+            'password' => 'Password',
+            'confirmPassword' => 'Confirm password'
+        ];
+    }
+
     public function __toString(){
         return sprintf('
         <div class="form-group">
@@ -26,7 +37,7 @@ class Field{
             </div>
         </div>
         ', 
-        $this->attribute,
+        $this->labels()[$this->attribute],
         $this->type, 
         $this->attribute, 
         $this->model->{$this->attribute}, 

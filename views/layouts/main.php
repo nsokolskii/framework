@@ -35,8 +35,8 @@ use app\core\Application;
         <a class="nav-link" href="/login">Log in<span class="sr-only"></span></a>
         <a class="nav-link" href="/register">Register<span class="sr-only"></span></a>
         <?php else: ?>
-        <a class="nav-link" href="/logout">Log out<span class="sr-only"></span></a>
         <a class="nav-link" href="#"><?php echo Application::$app->user->getDisplayName(); ?><span class="sr-only"></span></a>
+        <a class="nav-link" href="/logout">Log out<span class="sr-only"></span></a>
         <?php endif; ?>
         
         </ul>

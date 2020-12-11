@@ -2,9 +2,9 @@
 
 namespace app\models;
 
-use app\core\DbModel;
+use app\core\UserModel;
 
-class User extends DbModel{
+class User extends UserModel{
     const ROLE_READER = 0;
     const ROLE_AUTHOR = 1;
     public string $firstname = '';
@@ -19,6 +19,14 @@ class User extends DbModel{
         return 'users';
     }
 
+    public function primaryKey() : string {
+        return 'id';
+    }
+
+    public function getDisplayName() : string {
+        return $this->firstname;
+    }
+
     public function save(){
         $this->password = password_hash($this->password, PASSWORD_DEFAULT);
         return parent::save();
@@ -28,7 +36,8 @@ class User extends DbModel{
         return [
             'firstname' => [self::RULE_REQUIRED],
             'lastname' => [self::RULE_REQUIRED],
-            'email' => [self::RULE_REQUIRED, self::RULE_EMAIL],
+            'email' => [self::RULE_REQUIRED, self::RULE_EMAIL, [
+                self::RULE_UNIQUE, 'class' => self::class, 'attribute' => 'email']],
             'password' => [self::RULE_REQUIRED, [self::RULE_MIN, 'min' => 8], [self::RULE_MAX, 'max' => '100']],
             'confirmPassword' => [self::RULE_REQUIRED, [self::RULE_MATCH, 'match' => 'password']]
         ];

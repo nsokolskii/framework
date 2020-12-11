@@ -7,6 +7,10 @@ use app\core\DbModel;
 class Gallery extends DbModel{
     public $shots = [];
 
+    public function primaryKey() : string {
+        return 'id';
+    }
+
     public function tableName(): string {
         return 'shots';
     }

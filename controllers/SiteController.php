@@ -17,7 +17,7 @@ class SiteController extends Controller{
         var_dump($body);
     }
     public function check(){
-        return Application::$app->router->renderView('check');
+        return Application::$view->renderView('check');
     }
     public function home(){
         $params = [

@@ -13,6 +13,10 @@ class Post extends DbModel{
     public function tableName(): string {
         return 'shots';
     }
+
+    public function primaryKey() : string {
+        return 'id';
+    }
     
     public function rules(): array {
         return [];

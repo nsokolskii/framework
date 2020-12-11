@@ -10,6 +10,10 @@ class CommentBlock extends DbModel{
     public function tableName(): string {
         return 'comments';
     }
+
+    public function primaryKey() : string {
+        return 'id';
+    }
     
     public function rules(): array {
         return [];

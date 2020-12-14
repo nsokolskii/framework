@@ -20,8 +20,8 @@ require_once "models/Gallery.php";
 require_once "models/Post.php";
 require_once "models/CommentBlock.php";
 require_once "models/LoginForm.php";
+require_once "models/Invitation.php";
 require_once "core/View.php";
-
 
 use app\controllers\SiteController;
 use app\controllers\AuthController;

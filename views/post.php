@@ -31,7 +31,7 @@ echo sprintf("
 '/runtime/img/',
 $post['image'],
 $post['title'],
-$post['firstname'],
+$post['nickname'],
 $post['description']
 );
 

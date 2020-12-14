@@ -19,9 +19,9 @@ class Field{
 
     public function labels(){
         return [
-            'firstname' => 'Firstname',
-            'lastname' => 'Lastname',
+            'nickname' => 'Nickname',
             'email' => 'E-mail',
+            'invitationCode' => 'Invitation code, if you have one',
             'password' => 'Password',
             'confirmPassword' => 'Confirm password'
         ];

@@ -12,7 +12,7 @@ use app\core\Application;
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"> 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <title>Hello, world!</title>
+    <title>Dribbble-copy</title>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -35,6 +35,9 @@ use app\core\Application;
         <a class="nav-link" href="/login">Log in<span class="sr-only"></span></a>
         <a class="nav-link" href="/register">Register<span class="sr-only"></span></a>
         <?php else: ?>
+        <?php if(Application::$app->user->isAuthor()): ?>
+          <button type="button" class="btn btn-primary" style="margin-right: 10px;">Post a shot</button>
+        <?php endif; ?>
         <a class="nav-link" href="#"><?php echo Application::$app->user->getDisplayName(); ?><span class="sr-only"></span></a>
         <a class="nav-link" href="/logout">Log out<span class="sr-only"></span></a>
         <?php endif; ?>

@@ -27,11 +27,11 @@ class AuthController extends Controller{
     public function register(Request $request){
         $user = new User();
         if($request->isPost()){
-            
             $user->loadData($request->getBody());
-            if($user->validate() && $user->save()){
-                Application::$app->session->setFlash('success', 'Successful registration');
-                Application::$app->response->redirect('/');
+            
+            if($user->validate() && $user->save(['validated' => $user->validated])){
+                // Application::$app->session->setFlash('success', 'Successful registration');
+                // Application::$app->response->redirect('/');
                 exit;
             }
         }

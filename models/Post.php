@@ -23,7 +23,7 @@ class Post extends DbModel{
     }
 
     public function attributes() : array {
-        return ['shots.id', 'shots.author', 'shots.title', 'shots.description', 'shots.image', 'users.firstname'];
+        return ['shots.id', 'shots.author', 'shots.title', 'shots.description', 'shots.image', 'users.nickname'];
     }
 
     public function populate($id){

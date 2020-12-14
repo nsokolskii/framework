@@ -2,6 +2,8 @@
 
 namespace app\core;
 
+use app\models\Invitation;
+
 abstract class Model{
     public const RULE_REQUIRED = 'required';
     public const RULE_EMAIL = 'email';
@@ -9,6 +11,7 @@ abstract class Model{
     public const RULE_MAX = 'max';
     public const RULE_MATCH = 'match';
     public const RULE_UNIQUE = 'unique';
+    public const RULE_INVITED = 'invited';
     public function loadData($data){
         foreach($data as $key=>$value){
             if(property_exists($this, $key)){
@@ -20,6 +23,8 @@ abstract class Model{
     abstract public function rules(): array;
 
     public array $errors = [];
+
+    public array $validated = [];
 
     public function addError(string $attribute, string $message){
         $this->errors[$attribute][] = $message;
@@ -37,6 +42,7 @@ abstract class Model{
         return [
             self::RULE_REQUIRED => 'This field is required',
             self::RULE_EMAIL => 'This field must be a valid email address',
+            self::RULE_INVITED => 'This invitation code is not valid',
             self::RULE_MIN => 'Min length of this field must be {min}',
             self::RULE_MAX => 'Max length of this field must be {max}',
             self::RULE_MATCH => 'This field must be the same as {match}',
@@ -54,6 +60,17 @@ abstract class Model{
                 }
                 if($ruleName === self::RULE_REQUIRED && !$value){
                     $this->addErrorRule($attribute, self::RULE_REQUIRED);
+                }
+                if($ruleName === self::RULE_INVITED && $value){
+                    $invitation = new Invitation();
+                    $invitation = $invitation->findOne(['invitationCode' => $value]);
+                    if(!$invitation){
+                        $this->addErrorRule($attribute, self::RULE_INVITED);
+                    }
+                    else{
+                        $this->validated[] = $attribute;
+                    }
+                    
                 }
                 if($ruleName === self::RULE_EMAIL && !filter_var($value, FILTER_VALIDATE_EMAIL)){
                     $this->addErrorRule($attribute, self::RULE_EMAIL);

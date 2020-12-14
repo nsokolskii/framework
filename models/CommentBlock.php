@@ -20,7 +20,7 @@ class CommentBlock extends DbModel{
     }
 
     public function attributes() : array {
-        return ['comments.id', 'comments.author', 'comments.comment', 'comments.upvotes', 'users.firstname'];
+        return ['comments.id', 'comments.author', 'comments.comment', 'comments.upvotes', 'users.nickname'];
     }
 
     public function populate($id){

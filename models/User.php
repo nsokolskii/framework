@@ -7,12 +7,12 @@ use app\core\UserModel;
 class User extends UserModel{
     const ROLE_READER = 0;
     const ROLE_AUTHOR = 1;
-    public string $firstname = '';
-    public string $lastname = '';
+    public string $nickname = '';
     public string $email = '';
     public int $role = self::ROLE_READER;
     public string $password = '';
     public string $confirmPassword = '';
+    public string $invitationCode = '';
     public $data = [];
 
     public function tableName(): string {
@@ -23,28 +23,35 @@ class User extends UserModel{
         return 'id';
     }
 
-    public function getDisplayName() : string {
-        return $this->firstname;
+    public function isAuthor(){
+        return $this->role;
     }
 
-    public function save(){
+    public function getDisplayName() : string {
+        return $this->nickname;
+    }
+
+    public function save($params = []){
         $this->password = password_hash($this->password, PASSWORD_DEFAULT);
+        if(array_search('invitationCode', $params['validated']) !== false){
+            $this->role = self::ROLE_AUTHOR;
+        }
         return parent::save();
     }
 
     public function rules(): array {
         return [
-            'firstname' => [self::RULE_REQUIRED],
-            'lastname' => [self::RULE_REQUIRED],
+            'nickname' => [self::RULE_REQUIRED],
             'email' => [self::RULE_REQUIRED, self::RULE_EMAIL, [
                 self::RULE_UNIQUE, 'class' => self::class, 'attribute' => 'email']],
+            'invitationCode' => [self::RULE_INVITED],
             'password' => [self::RULE_REQUIRED, [self::RULE_MIN, 'min' => 8], [self::RULE_MAX, 'max' => '100']],
             'confirmPassword' => [self::RULE_REQUIRED, [self::RULE_MATCH, 'match' => 'password']]
         ];
     }
 
     public function attributes() : array{
-        return ['firstname', 'lastname', 'email', 'role', 'password'];
+        return ['nickname', 'email', 'role', 'password'];
     }
 
     public function populate($id){

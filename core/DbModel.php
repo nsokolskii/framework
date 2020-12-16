@@ -18,6 +18,7 @@ abstract class DbModel extends Model{
             $statement->bindValue(":$attribute", $this->{$attribute});
         }
         $statement->execute();
+        return true;
     }
 
     public function findOne($where){
@@ -30,6 +31,13 @@ abstract class DbModel extends Model{
         }
         $statement->execute();
         return $statement->fetchObject(static::class);
+    }
+
+    public static function removeOne($field, $value){
+        $tableName = static::tableName();
+        $statement = self::prepare("DELETE FROM $tableName WHERE $field = '$value'");
+        $statement->execute();
+        return true;
     }
 
     public function loadFromDb($condition = ''){

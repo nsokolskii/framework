@@ -20,7 +20,12 @@ require_once "models/Gallery.php";
 require_once "models/Post.php";
 require_once "models/CommentBlock.php";
 require_once "models/LoginForm.php";
+require_once "models/Invitation.php";
 require_once "core/View.php";
+require_once "core/Mailer.php";
+require_once "models/Confirmation.php";
+require_once "models/RestoreForm.php";
+require_once "models/Restoration.php";
 
 
 use app\controllers\SiteController;
@@ -28,6 +33,8 @@ use app\controllers\AuthController;
 use app\core\Application;
 
 $config = [
+    'domainName' => 'time.test',
+    'userClass' => \app\models\User::class,
     'db' => [
         'dsn' => 'mysql:host=localhost;port=3306;dbname=newdb',
         'user' => 'test_user',

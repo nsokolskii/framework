@@ -35,6 +35,9 @@ use app\core\Application;
         <a class="nav-link" href="/login">Log in<span class="sr-only"></span></a>
         <a class="nav-link" href="/register">Register<span class="sr-only"></span></a>
         <?php else: ?>
+          <?php if(!Application::$app->user->isConfirmed()): ?>
+          <button type="button" class="btn btn-outline-danger" style="margin-right: 10px;">Confirm your email</button>
+        <?php endif; ?>
         <?php if(Application::$app->user->isAuthor()): ?>
           <button type="button" class="btn btn-primary" style="margin-right: 10px;">Post a shot</button>
         <?php endif; ?>

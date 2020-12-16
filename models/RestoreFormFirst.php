@@ -4,26 +4,22 @@ namespace app\models;
 use app\core\Model;
 use app\core\Application;
 
-class LoginForm extends Model{
+class RestoreFormFirst extends Model{
     public string $email = '';
-    public string $password = '';
     public function rules() : array {
         return [
             'email' => [self::RULE_REQUIRED, self::RULE_EMAIL],
-            'password' => [self::RULE_REQUIRED]
         ];
     }
 
-    public function login(){
+    public function restore($hash){
         $user = User::findOne(['email' => $this->email]);
         if(!$user){
             $this->addError('email', 'User with this email does not exist');
             return false;
         }
-        if(!password_verify($this->password, $user->password)){
-            $this->addError('password', 'Password is incorrect');
-            return false;
-        }
-        return Application::$app->login($user);
+        $restoration = new Restoration();
+        $restoration->saveRestorationEntry($this->email, $hash);
+        return true;
     }
 }

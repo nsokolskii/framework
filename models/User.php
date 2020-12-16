@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\core\UserModel;
+use app\core\Application;
 
 class User extends UserModel{
     const ROLE_READER = 0;
@@ -13,6 +14,7 @@ class User extends UserModel{
     public string $password = '';
     public string $confirmPassword = '';
     public string $invitationCode = '';
+    public int $confirmed = 0;
     public $data = [];
 
     public function tableName(): string {
@@ -25,6 +27,10 @@ class User extends UserModel{
 
     public function isAuthor(){
         return $this->role;
+    }
+
+    public function isConfirmed(){
+        return $this->confirmed;
     }
 
     public function getDisplayName() : string {
@@ -51,11 +57,17 @@ class User extends UserModel{
     }
 
     public function attributes() : array{
-        return ['nickname', 'email', 'role', 'password'];
+        return ['nickname', 'email', 'role', 'password', 'confirmed'];
     }
 
     public function populate($id){
         $sql = " WHERE id = $id";
         $this->data = $this->loadFromDb($sql)[0];
+    }
+
+    public static function alter($key, $field, $value){
+        $sql = "UPDATE users SET $field = '$value' WHERE email = '$key'";
+        $statement = Application::$app->db->pdo->prepare($sql);
+        $statement->execute();
     }
 }

@@ -1,21 +1,19 @@
 <?php
 
-class m0001_initial{
+class m0007_add_restore_table{
     public function up(){
         $db = \app\core\Application::$app->db;
-        $SQL = "CREATE TABLE users (
+        $SQL = "CREATE TABLE restore (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            nickname VARCHAR(255) NOT NULL,
-            email VARCHAR(255) NOT NULL,
-            role TINYINT NOT NULL DEFAULT 0,
-            confirmed TINYINT NOT NULL DEFAULT 0,
+            email VARCHAR(256) NOT NULL,
+            hash VARCHAR(512) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
         $db->pdo->exec($SQL);
     }
     public function down(){
         $db = \app\core\Application::$app->db;
-        $SQL = "DROP TABLE users";
+        $SQL = "DROP TABLE restore";
         $db->pdo->exec($SQL);
     }
 }

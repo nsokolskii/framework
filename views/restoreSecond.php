@@ -1,10 +1,9 @@
 <link type="text/css" rel="stylesheet" href="/views/stylesheets/post.css">
 <div class="header">
-Log in
+Enter a new password
 </div>
 <?php $form = \app\core\form\Form::begin('', "post"); ?>
-    <?php echo $form->field($model, 'email'); ?>
     <?php echo $form->field($model, 'password')->passwordField(); ?>
-    <a href="/restore">Restore password</a><br><br>
+    <?php echo $form->field($model, 'confirmPassword')->passwordField(); ?>
     <button type="submit" class="btn btn-primary">Submit</button>
 <?php echo \app\core\form\Form::end(); ?>

@@ -7,6 +7,7 @@ require_once "Controller.php";
 
 class Application{
     public static string $ROOT_DIR;
+    public static string $DOMAIN_NAME;
 
     public $userClass;
     public Router $router;
@@ -18,6 +19,7 @@ class Application{
     public static View $view;
     public Session $session;
     public ?DbModel $user;
+    public Mailer $mailer;
     public function getController(){
         return $this->controller;
     }
@@ -26,6 +28,7 @@ class Application{
     }
     public function __construct($rootPath, array $config){
         $this->userClass = $config['userClass'];
+        self::$DOMAIN_NAME = $config['domainName'];
         self::$ROOT_DIR = $rootPath;
         self::$app = $this;
         $this->request = new Request();
@@ -42,7 +45,7 @@ class Application{
         else{
             $this->user = null;
         }
-        
+        $this->mailer = new Mailer(); 
     }
     public function run(){
         echo $this->router->resolve();

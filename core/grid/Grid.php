@@ -5,7 +5,7 @@ namespace app\core\grid;
 abstract class Grid{
     
     public abstract function getClass() : string;
-    public function begin($data){
+    public function show($data){
         echo "<div class='".$this->getClass()."'>";
         $this->generateGrid($data);
     }

@@ -1,15 +1,19 @@
-<form action="" method="post">
-  <div class="form-group">
-    <label>Subject</label>
-    <input type="text" name="subject" class="form-control">
-  </div>
-  <div class="form-group">
-    <label>E-mail</label>
-    <input type="text" name="email" class="form-control">
-  </div>
-  <div class="form-group">
-    <label>Body</label>
-    <textarea type="text" name="body" class="form-control"></textarea>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+<?php
+
+use app\core\Application;
+
+$classesArgs = [
+  'shots' => app\repository\PostEntry::class,
+  'users' => app\repository\User::class
+];
+
+?>
+
+<link type="text/css" rel="stylesheet" href="/views/stylesheets/post.css">
+<div class="header">
+Restore password, using repository
+</div>
+<?php $form = \app\core\form\Form::begin('', "post"); ?>
+    <?php echo $form->field($model, 'email'); ?>
+    <button type="submit" class="btn btn-primary">Continue</button>
+<?php echo \app\core\form\Form::end(); ?>

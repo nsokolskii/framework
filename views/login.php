@@ -2,9 +2,15 @@
 <div class="header">
 Log in
 </div>
-<?php $form = \app\core\form\Form::begin('', "post"); ?>
-    <?php echo $form->field($model, 'email'); ?>
-    <?php echo $form->field($model, 'password')->passwordField(); ?>
+<?php
+
+use app\core\Application;
+
+$form = Application::$app->templates->form; 
+$form::begin('', "post");
+?>
+    <?php $form->field($model, 'email'); ?>
+    <?php $form->field($model, 'password', 1); ?>
     <a href="/restore">Restore password</a><br><br>
     <button type="submit" class="btn btn-primary">Submit</button>
-<?php echo \app\core\form\Form::end(); ?>
+<?php $form::end(); ?>

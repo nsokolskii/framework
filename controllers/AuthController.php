@@ -5,19 +5,13 @@ namespace app\controllers;
 use app\core\Application;
 use app\core\Controller;
 use app\core\Request;
-use app\models\Confirmation;
-use app\models\Restoration;
-use app\models\User;
-use app\models\LoginForm;
-use app\models\RestoreFormFirst;
-use app\models\RestoreFormSecond;
 
 class AuthController extends Controller{
     public function login(Request $request){
-        $loginForm = new LoginForm();
+        $loginForm = new \app\repository\User();
         if($request->isPost()){
            $loginForm->loadData($request->getBody());
-           if($loginForm->validate() && $loginForm->login()){
+           if($loginForm->validate('login') && $loginForm->login()){
                 Application::$app->session->setFlash('success', 'Successful login');
                 Application::$app->response->redirect('/');
                 exit;
@@ -28,14 +22,14 @@ class AuthController extends Controller{
             'model' => $loginForm
         ]);
     }
+
     public function register(Request $request){
-        $user = new User();
+        $user = new \app\repository\User();
         if($request->isPost()){
             $user->loadData($request->getBody());
-            if($user->validate() && $user->save(['validated' => $user->validated])){
-                $confirmation = new Confirmation();
-                $confirmationCode = password_hash($user->email, PASSWORD_DEFAULT);
-                $confirmation->saveConfirmationCode($user->email, $confirmationCode);
+            $hash = hash('sha256',date('Y-m-d H:i:s'));
+            if($user->validate('register') && $confirmationCode = $user->save(['validated' => $user->validated, 'hash' => $hash])){
+
                 Application::$app->mailer->configure('verify', 'Confirm your e-mail address', 'Click here to confirm your e-mail address');
                 Application::$app->mailer->send($user->email, $confirmationCode);
                 Application::$app->session->setFlash('success', "A message to <b>$user->email</b> with a confirmation link has been sent");
@@ -50,11 +44,12 @@ class AuthController extends Controller{
     }
 
     public function restoreFormFirst(Request $request){
-        $restoreForm = new RestoreFormFirst();
+        $restoreForm = new \app\repository\User();
         if($request->isPost()){
            $restoreForm->loadData($request->getBody());
            $hash = hash('sha256',date('Y-m-d H:i:s'));
-           if($restoreForm->validate() && $restoreForm->restore($hash)){
+           if($restoreForm->validate('restore1') && $restoreForm->restore($hash)){
+
                 Application::$app->mailer->configure('restore', 'Password restoration', 'Click here to restore your password');
                 Application::$app->mailer->send($restoreForm->email, $hash);
                 Application::$app->session->setFlash('success', "A message to <b>$restoreForm->email</b> with further instructions has been sent");
@@ -69,15 +64,18 @@ class AuthController extends Controller{
     }
 
     public function restoreFormSecond(Request $request, $hash){
-        $restoreForm = new RestoreFormSecond();
-        $restoration = Restoration::findOne(['hash' => $hash]);
+        $restoreForm = new \app\repository\User();
+        Application::$app->model->setTable('restore');
+        $restoration = Application::$app->model->findOne(['hash' => $hash]);
         if(!$restoration){
             Application::$app->response->redirect('/restore');
         }
         if($request->isPost()){
            $restoreForm->loadData($request->getBody());
-           if($restoreForm->validate() && $restoreForm->updatePassword($restoration)){
-                Restoration::removeOne('email', $restoration->email);
+           if($restoreForm->validate('restore2') && $restoreForm->updatePassword($restoration)){
+
+                Application::$app->model->setTable('restore');
+                Application::$app->model->removeOne(['email' => $restoration->email]);
                 Application::$app->session->setFlash('success', "Password successfully changed");
                 Application::$app->response->redirect('/');
                 exit;
@@ -98,9 +96,11 @@ class AuthController extends Controller{
     }
 
     public function verify($request, $path){
-        $confirmation = Confirmation::findOne(['confirmationCode' => $path[0]]);
-        User::alter($confirmation->email, 'confirmed', '1');
-        Confirmation::removeOne('email', $confirmation->email);
+        Application::$app->model->setTable('confirmations');
+        $confirmation = Application::$app->model->findOne(['hash' => $path[0]]);
+        Application::$app->model->removeOne(['email' => $confirmation->email]);
+        Application::$app->model->setTable('users');
+        Application::$app->model->alterOne(['email' => $confirmation->email], ['confirmed' => '1']);
         Application::$app->session->setFlash('success', "<b>$confirmation->email</b> successfully confirmed");
         Application::$app->response->redirect('/');
     }

@@ -1,10 +1,10 @@
 <?php
 
-namespace app\core;
+namespace app\repository;
 
-use app\models\Invitation;
+use app\core\Application;
 
-abstract class Model{
+abstract class FieldEntry{
     public const RULE_REQUIRED = 'required';
     public const RULE_EMAIL = 'email';
     public const RULE_MIN = 'min';
@@ -12,6 +12,7 @@ abstract class Model{
     public const RULE_MATCH = 'match';
     public const RULE_UNIQUE = 'unique';
     public const RULE_INVITED = 'invited';
+
     public function loadData($data){
         foreach($data as $key=>$value){
             if(property_exists($this, $key)){
@@ -50,8 +51,8 @@ abstract class Model{
         ];
     }
 
-    public function validate(){
-        foreach($this->rules() as $attribute => $rules){
+    public function validate($mode){
+        foreach($this->rules()[$mode] as $attribute => $rules){
             $value = $this->{$attribute};
             foreach($rules as $rule){
                 $ruleName = $rule;
@@ -62,8 +63,9 @@ abstract class Model{
                     $this->addErrorRule($attribute, self::RULE_REQUIRED);
                 }
                 if($ruleName === self::RULE_INVITED && $value){
-                    $invitation = new Invitation();
-                    $invitation = $invitation->findOne(['invitationCode' => $value]);
+                    $invitation = new \app\repository\Invitation();
+                    Application::$app->model->setTable('invites');
+                    $invitation = Application::$app->model->findOne(['invitationCode' => $value]);
                     if(!$invitation){
                         $this->addErrorRule($attribute, self::RULE_INVITED);
                     }

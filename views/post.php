@@ -1,6 +1,10 @@
 <link type="text/css" rel="stylesheet" href="/views/stylesheets/post.css">
 
+
 <?php
+
+use app\core\Application;
+
 echo sprintf("
 <div align='center'>
 <div class='header'>
@@ -20,7 +24,7 @@ echo sprintf("
 %s
 </div>
 <div class='username'>
-%s
+<a href='/user/%s'>%s</a>
 </div>
 <div class='postdesc'>
 %s
@@ -29,18 +33,29 @@ echo sprintf("
 </div>
 ", 
 '/runtime/img/',
-$post['image'],
-$post['title'],
-$post['nickname'],
-$post['description']
+$post->image,
+$post->title,
+$post->author,
+$post->nickname,
+$post->description
 );
 
-$grid = new \app\core\grid\CommentGrid();
 $n = count($comments);
 $postfix = ($n == 1) ? '' : 's';
 if($n){
     echo sprintf('<div align="center"><div class="header" align="left">%s comment%s:</div></div>', $n, $postfix);
 }
 else echo '<div align="center"><div class="header" align="left">No comments yet</div></div>';
-$grid->begin($comments);
-$grid->end();
+$grid = Application::$app->templates->comments;
+$grid->show($comments);
+
+?>
+<?php if(!Application::isGuest()): ?>
+<?php 
+$form = Application::$app->templates->form; 
+$form::begin('', "post"); 
+?>
+    <?php $form->field($model, 'comment'); ?>
+    <button type="submit" class="btn btn-primary">Comment</button>
+<?php $form::end(); ?>
+<?php endif; ?>

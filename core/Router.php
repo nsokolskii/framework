@@ -2,9 +2,6 @@
 
 namespace app\core;
 
-require_once "Request.php";
-require_once "Response.php";
-
 class Router{
     public Request $request;
     public Response $response;

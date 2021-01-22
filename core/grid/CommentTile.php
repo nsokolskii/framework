@@ -12,7 +12,7 @@ class CommentTile{
         %s
         </div>
         ',
-        $tileData['nickname'],
-        $tileData['comment']);
+        $tileData->nickname,
+        $tileData->comment);
     }
 }

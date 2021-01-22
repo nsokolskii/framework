@@ -2,17 +2,17 @@
 
 namespace app\core\form;
 
-use app\core\Model;
-
 class Form{
     public static function begin($action, $method){
         echo sprintf('<form action="%s" method="%s">', $action, $method);
-        return new Form();
     }
+
     public static function end(){
         echo '</form>';
     }
-    public function field(Model $model, $attribute){
-        return new Field($model, $attribute);
+    
+    public function field($model, $attribute, $type = 0){
+        $field = new Field($model, $attribute, $type);
+        echo $field->getField();
     }
 }

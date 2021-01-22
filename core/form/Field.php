@@ -2,17 +2,15 @@
 
 namespace app\core\form;
 
-use app\core\Model;
-
 class Field{
     public const TYPE_TEXT = 'text';
     public const TYPE_PASSWORD = 'password';
     public const TYPE_NUMBER = 'number';
     public string $type;
-    public Model $model;
+    public $model;
     public string $attribute;
-    public function __construct(Model $model, $attribute){
-        $this->type = self::TYPE_TEXT;
+    public function __construct($model, $attribute, $type){
+        $this->type = !$type ? self::TYPE_TEXT : self::TYPE_PASSWORD;
         $this->model = $model;
         $this->attribute = $attribute;
     }
@@ -23,12 +21,13 @@ class Field{
             'email' => 'E-mail',
             'invitationCode' => 'Invitation code, if you have one',
             'password' => 'Password',
-            'confirmPassword' => 'Confirm password'
+            'confirmPassword' => 'Confirm password',
+            'comment' => 'Your comment'
         ];
     }
 
-    public function __toString(){
-        return sprintf('
+    public function getField(){
+        echo sprintf('
         <div class="form-group">
             <label>%s</label>
             <input type="%s" name="%s" value="%s" class="form-control%s">

@@ -1,9 +1,6 @@
-<?php #Do autoloading
+<?php
 
 namespace app\core;
-
-require_once "Router.php";
-require_once "Controller.php";
 
 class Application{
     public static string $ROOT_DIR;
@@ -18,8 +15,10 @@ class Application{
     public Controller $controller;
     public static View $view;
     public Session $session;
-    public ?DbModel $user;
+    public $user;
+    public $model;
     public Mailer $mailer;
+    public $templates;
     public function getController(){
         return $this->controller;
     }
@@ -27,7 +26,6 @@ class Application{
         $this->controller = $controller;
     }
     public function __construct($rootPath, array $config){
-        $this->userClass = $config['userClass'];
         self::$DOMAIN_NAME = $config['domainName'];
         self::$ROOT_DIR = $rootPath;
         self::$app = $this;
@@ -37,23 +35,31 @@ class Application{
         $this->session = new Session();
         $this->router = new Router($this->request, $this->response);
         $this->db = new Database($config['db']);
+        $this->mailer = new Mailer();
+        $model = $config['model'];
+        $classesArgs = $config['modelClasses'];
+        $this->model = new $model($classesArgs);
         $primaryValue = $this->session->get('user');
         if($primaryValue){
-            $primaryKey = $this->userClass::primaryKey();
-            $this->user = $this->userClass::findOne([$primaryKey => $primaryValue]);
+            $user = new \app\repository\User();
+            $primaryKey = $user::$primaryKey;
+            $this->model->setTable('users');
+            $this->user = $this->model->findOne([$primaryKey => $primaryValue]);
         }
         else{
             $this->user = null;
         }
-        $this->mailer = new Mailer(); 
+        $templateArgs = $config['templateClasses'];
+        $this->templates = new Templates($templateArgs);
     }
+
     public function run(){
         echo $this->router->resolve();
     }
 
-    public function login(DbModel $user){
+    public function login($user){
         $this->user = $user;
-        $primaryKey = $user->primaryKey();
+        $primaryKey = $user::$primaryKey;
         $primaryValue = $user->{$primaryKey};
         $this->session->set('user', $primaryValue);
         return true;

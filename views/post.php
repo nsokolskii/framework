@@ -9,12 +9,11 @@ echo sprintf("
 <div align='center'>
 <div class='header'>
 <div align='left'>
-<a href='%s'>< go back</a>
+<a href='#' onClick='history.go(-1);'>< go back</a>
 </div>
 </div>
 </div>
-", 
-$backPath);
+");
 echo sprintf("
 <div class='posthead' align='center'>
 <div class='postimage' style='background-image: url(%s%s);'>
@@ -40,22 +39,21 @@ $post->nickname,
 $post->description
 );
 
-$n = count($comments);
-$postfix = ($n == 1) ? '' : 's';
-if($n){
-    echo sprintf('<div align="center"><div class="header" align="left">%s comment%s:</div></div>', $n, $postfix);
-}
-else echo '<div align="center"><div class="header" align="left">No comments yet</div></div>';
+echo '<div id="comments">';
 $grid = Application::$app->templates->comments;
+$grid->getCount($comments);
 $grid->show($comments);
-
+$grid->end();
+echo '</div>';
 ?>
 <?php if(!Application::isGuest()): ?>
-<?php 
-$form = Application::$app->templates->form; 
-$form::begin('', "post"); 
-?>
-    <?php $form->field($model, 'comment'); ?>
-    <button type="submit" class="btn btn-primary">Comment</button>
-<?php $form::end(); ?>
+<div class="comments">
+<div id="commentForm"></div>
+</div>
+<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<script type="text/babel" src="/views/js/asyncRequest.js"></script>
+<script type="text/babel" src="/views/js/Comment.js"></script>
 <?php endif; ?>
+

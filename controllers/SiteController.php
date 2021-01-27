@@ -25,25 +25,15 @@ class SiteController extends Controller{
         $post = Application::$app->model->findOne(['id' => $id]);
         Application::$app->model->setTable('comments');
         $comments = Application::$app->model->selectWhere(['post' => $id]);
-        $commentForm = new \app\repository\CommentEntry($id);
-        if($request->isPost()){
-            $commentForm->loadData($request->getBody());
-            if($commentForm->validate('post')){
-                Application::$app->model->save($commentForm);
-                Application::$app->response->redirect("/shots/$id");
-            };
-        }
         $params = [
             'post' => $post,
             'comments' => $comments,
-            'model' => $commentForm,
-            'backPath' => '/shots'
         ];
         return $this->render('post', $params);
     }
     public function showGallery(){
         Application::$app->model->setTable('shots');
-        $shots = Application::$app->model->selectAll();
+        $shots = Application::$app->model->selectWhere([], " ORDER BY created_at DESC ");
         $params = [
             'shots' => $shots
         ];
@@ -61,13 +51,36 @@ class SiteController extends Controller{
             Application::$app->model->setTable('users');
             $user = Application::$app->model->findOne(['id' => $userId]);
             Application::$app->model->setTable('shots');
-            $shots = Application::$app->model->selectWhere(['author' => $user->id]);
+            $shots = Application::$app->model->selectWhere(['author' => $user->id], " ORDER BY created_at DESC ");
             $params = [
                 'shots' => $shots,
-                'user' => $user->nickname,
+                'user' => $user,
             ];
             return $this->render('user', $params);
         }
         else return "No such user";
+    }
+    public function upload($request){
+        if(Application::isGuest() || !Application::$app->user->isAuthor()){
+            Application::$app->response->redirect("/");
+        }
+        $post = new \app\repository\PostEntry();
+        $file = new \app\repository\File();
+        if($request->isPost()){
+            $post->loadData($request->getBody());
+            $file->loadData($request->getFiles()['image']);
+            if($post->validate('create') && $file->validate()){
+                $hash = hash('sha256',date('Y-m-d H:i:s'));
+                $imageName = $hash.'.'.$file->getExt();
+                move_uploaded_file($file->tmp_name, 'runtime/img/'.$imageName);
+                $post->image = $imageName;
+                Application::$app->model->save($post);
+                Application::$app->response->redirect("/user/".Application::$app->user->id);
+            }
+        }
+        return $this->render('create', [
+            'model' => $post,
+            'fileModel' => $file
+        ]);
     }
 }

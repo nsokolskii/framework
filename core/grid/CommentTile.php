@@ -7,11 +7,12 @@ class CommentTile{
         return sprintf('
         <div class="comment">
         <div class="username">
-        %s
+        <a href="/user/%s">%s</a>
         </div>
         %s
         </div>
         ',
+        $tileData->author,
         $tileData->nickname,
         $tileData->comment);
     }

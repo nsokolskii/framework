@@ -38,4 +38,11 @@ class Request{
         }
         return $body;
     }
+    public function getFiles(){
+        $body = [];
+        foreach($_FILES as $key => $value){
+            $body[$key] = $value;
+        }
+        return $body;
+    }
 }

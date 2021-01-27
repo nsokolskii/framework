@@ -1,12 +1,8 @@
 <?php
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 require_once "autoloader.php";
 
 use app\controllers\SiteController;
+use app\controllers\AsyncController;
 use app\controllers\AuthController;
 use app\core\Application;
 
@@ -38,6 +34,12 @@ $app->router->get('/', [SiteController::class, 'shots']);
 $app->router->get('/shots', [SiteController::class, 'shots']);
 $app->router->post('/shots', [SiteController::class, 'shots']);
 $app->router->get('/user', [SiteController::class, 'user']);
+$app->router->get('/create', [SiteController::class, 'create']);
+$app->router->post('/create', [SiteController::class, 'create']);
+$app->router->get('/upload', [SiteController::class, 'upload']);
+$app->router->post('/upload', [SiteController::class, 'upload']);
+$app->router->post('/test', [AsyncController::class, 'test']);
+$app->router->post('/comment', [AsyncController::class, 'comment']);
 
 $app->router->get('/verify', [AuthController::class, 'verify']);
 $app->router->get('/login', [AuthController::class, 'login']);

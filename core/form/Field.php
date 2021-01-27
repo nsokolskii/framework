@@ -22,7 +22,10 @@ class Field{
             'invitationCode' => 'Invitation code, if you have one',
             'password' => 'Password',
             'confirmPassword' => 'Confirm password',
-            'comment' => 'Your comment'
+            'comment' => 'Your comment',
+            'title' => 'Shot title',
+            'description' => 'Shot description',
+            'image' => 'Image',
         ];
     }
 

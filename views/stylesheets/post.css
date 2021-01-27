@@ -1,7 +1,12 @@
-.comments > div {
+.comments .comment {
     border-radius: 8px;
     width: auto;
     padding: 10px;
+}
+
+#commentForm {
+    margin-top:15px;
+    margin-bottom:20px;
 }
 
 .username {
@@ -73,10 +78,18 @@ body {
     font-weight: 900;
 }
 
-.header a {
+a {
     color: #575757;
 }
-.header a:hover {
+a:hover {
     color: #252525;
     text-decoration: none;
+}
+
+input[type=file]{
+    margin-bottom: 15px;
+}
+
+.fileError{
+    color:red;
 }

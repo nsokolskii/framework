@@ -3,8 +3,8 @@
 namespace app\core\form;
 
 class Form{
-    public static function begin($action, $method){
-        echo sprintf('<form action="%s" method="%s">', $action, $method);
+    public static function begin($action, $method, $enctype = ""){
+        echo sprintf('<form action="%s" method="%s" enctype="%s">', $action, $method, $enctype);
     }
 
     public static function end(){

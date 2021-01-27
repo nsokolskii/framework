@@ -1,4 +1,4 @@
-.wrapper > a > div {
+.wrapper a .postimage {
     border-radius: 8px;
     height: 150px;
     width: auto;
@@ -6,6 +6,10 @@
     color: #fff;
     font-family: Helvetica;
     
+}
+
+.wrapper a .postimage:hover{
+    opacity:0.9 !important;
 }
 
 a { 

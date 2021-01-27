@@ -10,6 +10,7 @@ class MysqlRepository implements Repository{
     private $table;
     private $tablesToClasses = [];
 
+
     public function __construct($args){
         
         foreach($args as $key => $value){
@@ -40,14 +41,14 @@ class MysqlRepository implements Repository{
         return $this->table;
     }
 
-    public function selectWhere($where, $filters = []){
+    public function selectWhere($where = [], $filters = ""){
         $data = [];
         $tableName = $this->table;
         $attributesWhat = $this->classname::$attributes;
         $attributesWhat[] = $this->classname::$primaryKey;
         $attributesWhere = array_keys($where);
         $sql = implode("AND ", array_map(fn($attr) => "$attr = :$attr", $attributesWhere));
-        $statement = $this->db->pdo->prepare("SELECT ".implode(',', $attributesWhat)." FROM $tableName ".($sql ? "WHERE $sql" : ""));
+        $statement = $this->db->pdo->prepare("SELECT ".implode(',', $attributesWhat)." FROM $tableName ".($sql ? "WHERE $sql" : "").$filters);
         foreach($where as $key => $item){
             $statement->bindValue(":$key", $item);
         }

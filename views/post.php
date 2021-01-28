@@ -1,4 +1,5 @@
 <link type="text/css" rel="stylesheet" href="/views/stylesheets/post.css">
+<link type="text/css" rel="stylesheet" href="/views/stylesheets/gr.css">
 
 
 <?php
@@ -23,7 +24,7 @@ echo sprintf("
 %s
 </div>
 <div class='username'>
-<a href='/user/%s'>%s</a>
+<a href='/user/%s'>%s</a> <span class='created_at'> | %s</span>
 </div>
 <div class='postdesc'>
 %s
@@ -36,6 +37,7 @@ $post->image,
 $post->title,
 $post->author,
 $post->nickname,
+$post->time_elapsed_string($post->created_at),
 $post->description
 );
 

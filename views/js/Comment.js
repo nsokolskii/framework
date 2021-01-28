@@ -4,7 +4,7 @@ class CommentForm extends React.Component {
         super(props);
         this.state = {
           value: this.default,
-          invalid: "form-control",
+          invalid: "flex-fill mr-2 form-control",
           invalidInfo: ""
         };
     
@@ -18,7 +18,7 @@ class CommentForm extends React.Component {
         this.setState({value: event.target.value});
         if(event.target.value != this.default && event.target.value != ''){
             this.setState({
-                invalid: "form-control"
+                invalid: "flex-fill mr-2 form-control"
             })
         }
     }
@@ -52,15 +52,20 @@ class CommentForm extends React.Component {
     }
     render() {
       return (
-        <form onSubmit={this.handleSubmit}>
-            <div className="form-group">
-                <input type="text" name="comment" value={this.state.value} className={this.state.invalid} onChange={this.handleChange} onFocus={this.handleFocus} onBlur={this.handleBlur} />
-                <div className="invalid-feedback">
-                    {this.state.invalidInfo}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <form className="form-inline" onSubmit={this.handleSubmit}>
+                        <input type="text" name="comment" value={this.state.value} className={this.state.invalid} onChange={this.handleChange} onFocus={this.handleFocus} onBlur={this.handleBlur} />
+                        <input type="submit" value="Submit" className="btn btn-primary" />
+                        <div className="invalid-feedback">
+                            {this.state.invalidInfo}
+                        </div>
+                        
+                    </form>
                 </div>
             </div>
-            <input type="submit" value="Submit" className="btn btn-primary" />
-        </form>
+        </div>
       );
     }
   }

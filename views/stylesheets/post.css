@@ -93,3 +93,7 @@ input[type=file]{
 .fileError{
     color:red;
 }
+
+#commentForm {
+    width:930px;
+}

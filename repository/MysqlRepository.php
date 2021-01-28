@@ -23,6 +23,11 @@ class MysqlRepository implements Repository{
         $tableName = $entry->classname;
         $entryClassname = $this->tablesToClasses[$entry->classname];
         $attributes = $entryClassname::$attributes;
+        foreach($attributes as $key => $value){
+            if($entry->{$value} == ''){
+                unset($attributes[$key]);
+            }
+        }
         $params = array_map(fn($attr) => ":$attr", $attributes);
         $statement = $this->db->prepare("INSERT INTO $tableName (".implode(',', $attributes).") VALUES(".implode(',', $params).")");
         foreach($attributes as $attribute){

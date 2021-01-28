@@ -11,7 +11,7 @@ class CommentEntry extends FieldEntry{
     public $post = '';
     public $upvotes = 0;
     public string $classname = 'comments';
-    public static $attributes = ['post', 'author', 'comment', 'upvotes'];
+    public static $attributes = ['post', 'author', 'comment', 'upvotes', 'created_at'];
     public static $primaryKey = 'id';
 
     public function tableName(): string {

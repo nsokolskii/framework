@@ -19,7 +19,7 @@ class DeleteButton extends React.Component {
     handleClick(event){
         
         if(this.state.focused < 1){
-            this.setState({focused: this.state.focused + 1, value: "Click one more time to delete this post"});
+            this.setState({focused: this.state.focused + 1, value: "Click one more time to delete this shot"});
         }
         else{
             let pageId = window.location.href.split('/');

@@ -20,16 +20,14 @@ class AsyncController extends Controller{
     }
 
     public function comment($request){
-        if(!Application::isGuest()){
-            $comment = new \app\repository\CommentEntry();
-            $comment->comment = $_POST['value'];
-            $comment->post = $_POST['page'];
-            Application::$app->model->save($comment);
-            Application::$app->model->setTable('comments');
-            $grid = Application::$app->templates->comments;
-            $comments = Application::$app->model->selectWhere(['post' => $comment->post]);
-            $grid->getCount($comments);
-            return $grid->show($comments)."</div>";
-        }
+        $comment = new \app\repository\CommentEntry();
+        $comment->comment = $_POST['value'];
+        $comment->post = $_POST['page'];
+        Application::$app->model->save($comment);
+        Application::$app->model->setTable('comments');
+        $grid = Application::$app->templates->comments;
+        $comments = Application::$app->model->selectWhere(['post' => $comment->post]);
+        $grid->getCount($comments);
+        return $grid->show($comments)."</div>";
     }
 }

@@ -5,8 +5,18 @@ namespace app\core;
 class Router{
     public Request $request;
     public Response $response;
+    public const RULE_LOGGED_IN = 'logged_in';
+    public const RULE_AUTHOR = 'author';
+    public const RULE_SHOT_AUTHOR = 'shot_author';
+
     protected array $routes = [];
-    
+
+    protected array $rules = [
+        '/upload' => [self::RULE_LOGGED_IN, self::RULE_AUTHOR],
+        '/edit' => [self::RULE_LOGGED_IN, self::RULE_SHOT_AUTHOR],
+        '/delete' => [self::RULE_LOGGED_IN, self::RULE_SHOT_AUTHOR],
+        '/comment' => [self::RULE_LOGGED_IN]
+    ];
 
     public function __construct(Request $request, Response $response){
         $this->request = $request;
@@ -19,6 +29,28 @@ class Router{
 
     public function post($path, $callback){
         $this->routes['post'][$path] = $callback;
+    }
+
+    public function grantAccess($page, $subPath = ""){
+        if(!$this->rules[$page]){
+            return true;
+        }
+        foreach($this->rules[$page] as $rule){
+            if($rule == self::RULE_LOGGED_IN && Application::isGuest()){
+                return false;
+            }
+            if($rule == self::RULE_AUTHOR && !Application::$app->user->isAuthor()){
+                return false;
+            }
+            if($rule == self::RULE_SHOT_AUTHOR){
+                Application::$app->model->setTable('shots');
+                $shot = Application::$app->model->findOne(['id' => $subPath]);
+                if($shot->author != Application::$app->user->id){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public function resolve(){
@@ -39,7 +71,14 @@ class Router{
             Application::$app->controller = new $callback[0]();
             $callback[0] = Application::$app->controller;
         }
-        return call_user_func($callback, $this->request, $subPath);
+        if($this->grantAccess($path, $subPath[0])){
+            return call_user_func($callback, $this->request, $subPath);
+        }
+        else{
+            Application::$app->response->redirect("/");
+            exit;
+        }
+        
     }
 
     

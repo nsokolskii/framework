@@ -61,10 +61,6 @@ class SiteController extends Controller{
         else return "No such user";
     }
     public function upload($request){
-        if(Application::isGuest() || !Application::$app->user->isAuthor()){
-            Application::$app->response->redirect("/");
-            exit;
-        }
         $post = new \app\repository\PostEntry();
         $file = new \app\repository\File();
         if($request->isPost()){
@@ -88,10 +84,6 @@ class SiteController extends Controller{
         Application::$app->model->setTable('shots');
         $shotId = $path[0];
         $shot = Application::$app->model->findOne(['id' => $shotId]);
-        if(Application::isGuest() || $shot->author != Application::$app->user->id){
-            Application::$app->response->redirect("/");
-            exit;
-        }
         $file = new \app\repository\File();
         if($request->isPost()){
             $shot->loadData($request->getBody());
@@ -116,11 +108,6 @@ class SiteController extends Controller{
     public function delete($request, $path){
         Application::$app->model->setTable('shots');
         $shotId = $path[0];
-        $shot = Application::$app->model->findOne(['id' => $shotId]);
-        if(Application::isGuest() || $shot->author != Application::$app->user->id){
-            Application::$app->response->redirect("/");
-            exit;
-        }
         Application::$app->model->setTable('shots');
         Application::$app->model->removeOne(['id' => $shotId]);
         Application::$app->session->setFlash('success', "Post removed");

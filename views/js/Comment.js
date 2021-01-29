@@ -31,7 +31,9 @@ class CommentForm extends React.Component {
                 invalidInfo: "Comment must not be empty"})
         }
         else{
-            asyncRequest('/comment', this.state.value, 'shots', 'comments');
+            let parsedValue = this.state.value
+            parsedValue = parsedValue.replace(/</g, "").replace(/>/g, "");
+            asyncRequest('/comment', parsedValue, 'shots', 'comments');
             this.setState({
                 value: ""
             });

@@ -8,6 +8,7 @@ class CommentEntry extends FieldEntry{
     public $author = '';
     public $nickname = '';
     public $comment = '';
+    public $created_at = '';
     public $post = '';
     public $upvotes = 0;
     public string $classname = 'comments';

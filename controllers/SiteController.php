@@ -75,7 +75,7 @@ class SiteController extends Controller{
                 move_uploaded_file($file->tmp_name, 'runtime/img/'.$imageName);
                 $post->image = $imageName;
                 Application::$app->model->save($post);
-                //Application::$app->response->redirect("/user/".Application::$app->user->id);
+                Application::$app->response->redirect("/user/".Application::$app->user->id);
             }
         }
         return $this->render('create', [

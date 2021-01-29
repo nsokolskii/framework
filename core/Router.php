@@ -6,6 +6,7 @@ class Router{
     public Request $request;
     public Response $response;
     protected array $routes = [];
+    
 
     public function __construct(Request $request, Response $response){
         $this->request = $request;

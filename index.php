@@ -8,6 +8,7 @@ use app\core\Application;
 
 $config = [
     'domainName' => 'time.test',
+    'userClass' => \app\repository\User::class,
     'model' => \app\repository\MysqlRepository::class,
     'modelClasses' => [
         'shots' => \app\repository\PostEntry::class,
@@ -38,6 +39,9 @@ $app->router->get('/create', [SiteController::class, 'create']);
 $app->router->post('/create', [SiteController::class, 'create']);
 $app->router->get('/upload', [SiteController::class, 'upload']);
 $app->router->post('/upload', [SiteController::class, 'upload']);
+$app->router->get('/edit', [SiteController::class, 'edit']);
+$app->router->get('/delete', [SiteController::class, 'delete']);
+$app->router->post('/edit', [SiteController::class, 'edit']);
 $app->router->post('/test', [AsyncController::class, 'test']);
 $app->router->post('/comment', [AsyncController::class, 'comment']);
 

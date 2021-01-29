@@ -10,11 +10,13 @@ echo sprintf("
 <div align='center'>
 <div class='header'>
 <div align='left'>
-<a href='#' onClick='history.go(-1);'>< go back</a>
+<a href='#' onClick='history.go(-1);'>< go back</a>&nbsp;
+%s
 </div>
 </div>
 </div>
-");
+", 
+Application::$app->user->id == $post->author ? '<a href="/edit/'.$post->id.'" class="btn btn-primary">Edit post</a>' : "");
 echo sprintf("
 <div class='posthead' align='center'>
 <div class='postimage' style='background-image: url(%s%s);'>

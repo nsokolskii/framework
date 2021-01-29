@@ -87,8 +87,8 @@ class MysqlRepository implements Repository{
         $tableName = $this->table;
         $attributesSet = array_keys($what);
         $attributesWhere = array_keys($where);
-        $sqlSet = implode("AND ", array_map(fn($attr) => "$attr = :$attr", $attributesSet));
-        $sqlWhere = implode("AND ", array_map(fn($attr) => "$attr = :$attr", $attributesWhere));
+        $sqlSet = implode(",", array_map(fn($attr) => "$attr = :$attr", $attributesSet));
+        $sqlWhere = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributesWhere));
         $statement = $this->db->pdo->prepare("UPDATE $tableName SET $sqlSet WHERE $sqlWhere");
         foreach($where as $key => $item){
             $statement->bindValue(":$key", $item);
@@ -96,6 +96,7 @@ class MysqlRepository implements Repository{
         foreach($what as $key => $item){
             $statement->bindValue(":$key", $item);
         }
+        var_dump($statement);
         $statement->execute();
         return true;
     }

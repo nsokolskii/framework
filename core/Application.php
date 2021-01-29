@@ -41,7 +41,7 @@ class Application{
         $this->model = new $model($classesArgs);
         $primaryValue = $this->session->get('user');
         if($primaryValue){
-            $user = new \app\repository\User();
+            $user = new $config['userClass'];
             $primaryKey = $user::$primaryKey;
             $this->model->setTable('users');
             $this->user = $this->model->findOne([$primaryKey => $primaryValue]);

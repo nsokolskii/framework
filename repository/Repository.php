@@ -7,7 +7,7 @@ interface Repository{
     public function findOne($where);
     public function removeOne($where);
     public function alterOne($where, $what);
-    public function selectWhere($where, $filters = []);
+    public function selectWhere($where, $filters, $interval);
     public function selectAll();
     public function setTable(string $tableName);
     public function getTable();

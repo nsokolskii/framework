@@ -9,6 +9,7 @@ class MysqlRepository implements Repository{
     private $classname;
     private $table;
     private $tablesToClasses = [];
+    private $page = 2;
 
 
     public function __construct($args){
@@ -46,14 +47,14 @@ class MysqlRepository implements Repository{
         return $this->table;
     }
 
-    public function selectWhere($where = [], $filters = ""){
+    public function selectWhere($where = [], $filters = "", $interval = [0, 10]){
         $data = [];
         $tableName = $this->table;
         $attributesWhat = $this->classname::$attributes;
         $attributesWhat[] = $this->classname::$primaryKey;
         $attributesWhere = array_keys($where);
         $sql = implode("AND ", array_map(fn($attr) => "$attr = :$attr", $attributesWhere));
-        $statement = $this->db->pdo->prepare("SELECT ".implode(',', $attributesWhat)." FROM $tableName ".($sql ? "WHERE $sql" : "").$filters);
+        $statement = $this->db->pdo->prepare("SELECT ".implode(',', $attributesWhat)." FROM $tableName ".($sql ? "WHERE $sql" : "").$filters." LIMIT $interval[0], $interval[1]");
         foreach($where as $key => $item){
             $statement->bindValue(":$key", $item);
         }
@@ -106,6 +107,24 @@ class MysqlRepository implements Repository{
     }
 
     public function search($where, $what){
+        $data = [];
+        foreach($where as $table){
+            $tableName = $this->table;
+            $attributesWhat = $this->classname::$attributes;
+            $attributesWhat[] = $this->classname::$primaryKey;
+            $attributesWhere = array_keys($where);
+            $sql = implode("AND ", array_map(fn($attr) => "$attr = :$attr", $attributesWhere));
+            $statement = $this->db->pdo->prepare("SELECT ".implode(',', $attributesWhat)." FROM $tableName ".($sql ? "WHERE $sql" : "").$filters);
+            foreach($where as $key => $item){
+                $statement->bindValue(":$key", $item);
+            }
+            $statement->execute();
+        }
         
+        while($currentElement = $statement->fetchObject($this->classname)){
+            if($currentElement){
+                $data[] = $currentElement;
+            }
+        }
     }
 }

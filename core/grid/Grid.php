@@ -5,10 +5,14 @@ namespace app\core\grid;
 abstract class Grid{
     
     public abstract function getClass() : string;
-    public function show($data){
-        echo "<div class='".$this->getClass()."'>";
+    public function show($data, $paginate = 0){
+        if(!$paginate){
+            echo "<div class='".$this->getClass()."'>";
+        }
         $this->generateGrid($data);
-        $this->end();
+        if(!$paginate){
+            $this->end();
+        }
     }
 
     public function end(){

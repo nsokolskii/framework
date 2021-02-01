@@ -34,7 +34,7 @@ class SiteController extends Controller{
     }
     public function showGallery(){
         Application::$app->model->setTable('shots');
-        $shots = Application::$app->model->selectWhere([], " ORDER BY created_at DESC ");
+        $shots = Application::$app->model->selectWhere([], " ORDER BY created_at DESC ", [0, 10]);
         $params = [
             'shots' => $shots
         ];
@@ -67,13 +67,20 @@ class SiteController extends Controller{
         if($request->isPost()){
             $post->loadData($request->getBody());
             $file->loadData($request->getFiles()['image']);
-            if($post->validate('create') && !$file->empty() && $file->validate()){
-                $hash = hash('sha256',date('Y-m-d H:i:s'));
-                $imageName = $hash.'.'.$file->getExt();
-                move_uploaded_file($file->tmp_name, 'runtime/img/'.$imageName);
-                $post->image = $imageName;
-                Application::$app->model->save($post);
-                Application::$app->response->redirect("/user/".Application::$app->user->id);
+            if($post->validate('create') && $file->validate()){
+                if($file->empty()){
+                    $file->errors[] = "Image must be selected";
+                    
+                }
+                else{
+                    $hash = hash('sha256',date('Y-m-d H:i:s'));
+                    $imageName = $hash.'.'.$file->getExt();
+                    move_uploaded_file($file->tmp_name, 'runtime/img/'.$imageName);
+                    $post->image = $imageName;
+                    Application::$app->model->save($post);
+                    Application::$app->response->redirect("/user/".Application::$app->user->id);
+                }
+                
             }
         }
         return $this->render('create', [
@@ -115,5 +122,9 @@ class SiteController extends Controller{
         Application::$app->model->removeOne(['id' => $shotId]);
         Application::$app->session->setFlash('success', "Post removed");
         Application::$app->response->redirect("/user/".Application::$app->user->id);
+    }
+
+    public function search(){
+        return $this->render('search');
     }
 }

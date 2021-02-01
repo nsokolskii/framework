@@ -28,6 +28,21 @@ class AsyncController extends Controller{
         $grid = Application::$app->templates->comments;
         $comments = Application::$app->model->selectWhere(['post' => $comment->post]);
         $grid->getCount($comments);
-        return $grid->show($comments)."</div>";
+        return $grid->show($comments);
+    }
+
+    public function loadMore($request){
+        $_POST = json_decode(file_get_contents('php://input'), true);
+        $limit = $_POST['limit'];
+        Application::$app->model->setTable('shots');
+        $shots = Application::$app->model->selectWhere([], " ORDER BY created_at DESC ", [0, $limit]);
+        $grid = Application::$app->templates->browse;
+        ob_start();
+        $grid->show($shots);
+        $arr = array(
+            'html' => ob_get_clean(),
+            'all' => $limit > count($shots)
+        );
+        return json_encode($arr);
     }
 }

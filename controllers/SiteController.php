@@ -8,6 +8,7 @@ use app\core\Request;
 
 class SiteController extends Controller{
     public string $layout = 'main';
+
     public function handleCheck(Request $request){
         $body = $request->getBody();
     }
@@ -66,7 +67,7 @@ class SiteController extends Controller{
         if($request->isPost()){
             $post->loadData($request->getBody());
             $file->loadData($request->getFiles()['image']);
-            if($post->validate('create') && $file->validate()){
+            if($post->validate('create') && !$file->empty() && $file->validate()){
                 $hash = hash('sha256',date('Y-m-d H:i:s'));
                 $imageName = $hash.'.'.$file->getExt();
                 move_uploaded_file($file->tmp_name, 'runtime/img/'.$imageName);
@@ -89,12 +90,14 @@ class SiteController extends Controller{
             $shot->loadData($request->getBody());
             $file->loadData($request->getFiles()['image']);
             if($shot->validate('create') && $file->validate()){
-                $hash = hash('sha256',date('Y-m-d H:i:s'));
-                $imageName = $hash.'.'.$file->getExt();
-                $oldImageName = $shot->image;
-                unlink('runtime/img/'.$oldImageName);
-                move_uploaded_file($file->tmp_name, 'runtime/img/'.$imageName);
-                $shot->image = $imageName;
+                if(!$file->empty()){
+                    $hash = hash('sha256',date('Y-m-d H:i:s'));
+                    $imageName = $hash.'.'.$file->getExt();
+                    $oldImageName = $shot->image;
+                    unlink('runtime/img/'.$oldImageName);
+                    move_uploaded_file($file->tmp_name, 'runtime/img/'.$imageName);
+                    $shot->image = $imageName;
+                }
                 Application::$app->model->setTable('shots');
                 Application::$app->model->alterOne(['id' => $shotId], ['title' => $shot->title, 'description' => $shot->description, 'image' => $shot->image]);
                 Application::$app->response->redirect("/shots/".$shotId);

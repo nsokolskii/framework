@@ -11,4 +11,5 @@ interface Repository{
     public function selectAll();
     public function setTable(string $tableName);
     public function getTable();
+    public function search($where, $what);
 }

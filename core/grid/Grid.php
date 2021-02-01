@@ -8,6 +8,7 @@ abstract class Grid{
     public function show($data){
         echo "<div class='".$this->getClass()."'>";
         $this->generateGrid($data);
+        $this->end();
     }
 
     public function end(){

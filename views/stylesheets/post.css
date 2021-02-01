@@ -95,5 +95,8 @@ input[type=file]{
 }
 
 #commentForm {
+    margin: auto;
+    margin-top:15px;
+    margin-bottom:15px;
     width:930px;
 }

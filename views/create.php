@@ -1,14 +1,12 @@
-<link type="text/css" rel="stylesheet" href="/views/stylesheets/post.css">
 <div align="center"><div class="header" align="left">Create a shot</div></div>
 <div class="comments">
-
 
 <?php
 
 use app\core\Application;
 
 $form = Application::$app->templates->form; 
-$form::begin('', "post", "multipart/form-data");
+$form->begin('', "post", "multipart/form-data");
 ?>
     <input type="file" name="image">
     <span class="fileError">
@@ -19,5 +17,5 @@ $form::begin('', "post", "multipart/form-data");
     <?php $form->field($model, 'title'); ?>
     <?php $form->field($model, 'description'); ?>
     <button type="submit" class="btn btn-primary">Upload</button>
-<?php $form::end(); ?>
+<?php $form->end(); ?>
 </div>

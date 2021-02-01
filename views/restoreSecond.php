@@ -1,4 +1,3 @@
-<link type="text/css" rel="stylesheet" href="/views/stylesheets/post.css">
 <div class="header">
 Enter a new password
 </div>
@@ -7,9 +6,9 @@ Enter a new password
 use app\core\Application;
 
 $form = Application::$app->templates->form; 
-$form::begin('', "post"); 
+$form->begin('', "post"); 
 ?>
     <?php $form->field($model, 'password', 1); ?>
     <?php $form->field($model, 'confirmPassword', 1); ?>
     <button type="submit" class="btn btn-primary">Submit</button>
-<?php $form::end(); ?>
+<?php $form->end(); ?>

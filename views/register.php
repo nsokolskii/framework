@@ -1,4 +1,3 @@
-<link type="text/css" rel="stylesheet" href="/views/stylesheets/post.css">
 <div class="header">
 Register
 </div>
@@ -7,7 +6,7 @@ Register
 use app\core\Application;
 
 $form = Application::$app->templates->form; 
-$form::begin('', "post");  
+$form->begin('', "post");  
 ?>
     <?php $form->field($model, 'nickname'); ?>
     <?php $form->field($model, 'email'); ?>
@@ -16,4 +15,4 @@ $form::begin('', "post");
     <?php $form->field($model, 'confirmPassword', 1); ?>
     <button type="submit" class="btn btn-primary">Submit</button>
     
-<?php $form::end(); ?>
+<?php $form->end(); ?>

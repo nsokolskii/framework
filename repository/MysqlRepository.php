@@ -104,4 +104,8 @@ class MysqlRepository implements Repository{
     public function selectAll(){
         return $this->selectWhere([]);
     }
+
+    public function search($where, $what){
+        
+    }
 }

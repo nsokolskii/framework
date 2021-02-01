@@ -26,7 +26,16 @@ class File{
         return $ext;
     }
 
+    public function empty(){
+        if($this->error == 4){
+            return true;
+        }
+    }
+
     public function validate(){
+        if($this->empty()){
+            return true;
+        }
         if(in_array($this->getExt(), $this->allowedTypes)){
             return true;
         }

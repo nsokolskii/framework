@@ -21,7 +21,8 @@ $config = [
     'templateClasses' => [
         'comments' => \app\core\grid\CommentGrid::class,
         'browse' => \app\core\grid\BrowseGrid::class,
-        'form' => \app\core\form\Form::class
+        'form' => \app\core\form\Form::class,
+        'shot' => \app\core\shot\Shot::class
     ],
     'db' => [
         'dsn' => 'mysql:host=localhost;port=3306;dbname=newdb',

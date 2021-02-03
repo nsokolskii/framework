@@ -63,7 +63,7 @@ abstract class FieldEntry{
                     $this->addErrorRule($attribute, self::RULE_REQUIRED);
                 }
                 if($ruleName === self::RULE_INVITED && $value){
-                    $invitation = new \app\repository\Invitation();
+                    $invitation = new \app\repository\InvitationEntry();
                     Application::$app->model->setTable('invites');
                     $invitation = Application::$app->model->findOne(['invitationCode' => $value]);
                     if(!$invitation){

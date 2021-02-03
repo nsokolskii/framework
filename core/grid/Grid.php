@@ -6,13 +6,13 @@ abstract class Grid{
     
     public abstract function getClass() : string;
     public function show($data, $paginate = 0){
-        if(!$paginate){
-            echo "<div class='".$this->getClass()."'>";
-        }
+        //echo '<span id="res">';
         $this->generateGrid($data);
-        if(!$paginate){
-            $this->end();
-        }
+        //echo '</span>';
+    }
+
+    public function begin(){
+        echo "<div class='".$this->getClass()."'>";
     }
 
     public function end(){

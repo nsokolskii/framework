@@ -2,7 +2,7 @@
 
 namespace app\repository;
 
-class File{
+class FileEntry{
     public $name = '';
     public $type = '';
     public $tmp_name = '';
@@ -22,7 +22,8 @@ class File{
     }
 
     public function getExt(){
-        $ext = strtolower(end(explode('.', $this->name)));
+        $expl = explode('.', $this->name);
+        $ext = strtolower(end($expl));
         return $ext;
     }
 

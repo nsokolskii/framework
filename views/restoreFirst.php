@@ -1,13 +1,16 @@
 <div class="header">
-Restore password
+    Restore password
 </div>
-<?php 
+<?php
 
 use app\core\Application;
 
-$form = Application::$app->templates->form; 
-$form->begin('', "post"); 
+$form = Application::$app->templates->form;
+$form->begin('', "post");
+
 ?>
-    <?php $form->field($model, 'email'); ?>
-    <button type="submit" class="btn btn-primary">Continue</button>
+
+<?php $form->field($model, 'email'); ?>
+<button type="submit" class="btn btn-primary">Continue</button>
+
 <?php $form->end(); ?>

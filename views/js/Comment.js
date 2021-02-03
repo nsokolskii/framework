@@ -33,10 +33,15 @@ class CommentForm extends React.Component {
         else{
             let parsedValue = this.state.value
             parsedValue = parsedValue.replace(/</g, "").replace(/>/g, "");
-            asyncRequest('/comment', parsedValue, 'shots', 'comments');
-            this.setState({
-                value: ""
+            let pageId = window.location.href.split('/');
+            pageId = pageId[pageId.indexOf('shots') + 1];
+            postData("/comment", { "value": parsedValue, "post": pageId }).then((data) => {
+                document.querySelector('#comments').innerHTML = data.html;
+                this.setState({
+                    value: ""
+                });
             });
+            
         }
         
     }

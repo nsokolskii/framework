@@ -9,7 +9,11 @@ class SortForm extends React.Component {
 
   handleChange(event) {
     this.setState({value: event.target.value});
-    asyncRequest('/test', event.target.value, 'user', 'container');
+    let pageId = window.location.href.split('/');
+    pageId = pageId[pageId.indexOf('user') + 1];
+    postData("/test", { "value": event.target.value, "user": pageId }).then((data) => {
+      document.querySelector('.wrapper').innerHTML = data.html;
+  });
   }
 
   handleSubmit(event) {

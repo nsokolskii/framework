@@ -27,19 +27,4 @@ class PostEntry extends FieldEntry{
             ]
         ];
     }
-
-    public function __construct(){
-        if($this->author){
-            $prevTable = Application::$app->model->getTable();
-            Application::$app->model->setTable('users');
-            $author = Application::$app->model->findOne(['id' => $this->author]);
-            $this->nickname = $author->nickname;
-            Application::$app->model->setTable($prevTable);
-        }
-        else{
-            $this->author = Application::isGuest() ? 0 : Application::$app->user->id;
-        }
-    }
-
-    
 }

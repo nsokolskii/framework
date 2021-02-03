@@ -9,8 +9,6 @@ class MysqlRepository implements Repository{
     private $classname;
     private $table;
     private $tablesToClasses = [];
-    private $page = 2;
-
 
     public function __construct($args){
         
@@ -54,7 +52,7 @@ class MysqlRepository implements Repository{
         $attributesWhat[] = $this->classname::$primaryKey;
         $attributesWhere = array_keys($where);
         $sql = implode("AND ", array_map(fn($attr) => "$attr = :$attr", $attributesWhere));
-        $statement = $this->db->pdo->prepare("SELECT ".implode(',', $attributesWhat)." FROM $tableName ".($sql ? "WHERE $sql" : "").$filters." LIMIT $interval[0], $interval[1]");
+        $statement = $this->db->prepare("SELECT ".implode(',', $attributesWhat)." FROM $tableName ".($sql ? "WHERE $sql" : "").$filters." LIMIT $interval[0], $interval[1]");
         foreach($where as $key => $item){
             $statement->bindValue(":$key", $item);
         }
@@ -76,7 +74,7 @@ class MysqlRepository implements Repository{
         $tableName = $this->table;
         $attributes = array_keys($where);
         $sql = implode("AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
-        $statement = $this->db->pdo->prepare("DELETE FROM $tableName WHERE $sql");
+        $statement = $this->db->prepare("DELETE FROM $tableName WHERE $sql");
         foreach($where as $key => $item){
             $statement->bindValue(":$key", $item);
         }
@@ -90,7 +88,7 @@ class MysqlRepository implements Repository{
         $attributesWhere = array_keys($where);
         $sqlSet = implode(",", array_map(fn($attr) => "$attr = :$attr", $attributesSet));
         $sqlWhere = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributesWhere));
-        $statement = $this->db->pdo->prepare("UPDATE $tableName SET $sqlSet WHERE $sqlWhere");
+        $statement = $this->db->prepare("UPDATE $tableName SET $sqlSet WHERE $sqlWhere");
         foreach($where as $key => $item){
             $statement->bindValue(":$key", $item);
         }
@@ -106,7 +104,7 @@ class MysqlRepository implements Repository{
         return $this->selectWhere([]);
     }
 
-    public function search($where, $what){
+    public function search($where, $what, $filters = ""){
         $data = [];
         foreach($where as $table){
             $tableName = $this->table;
@@ -114,7 +112,7 @@ class MysqlRepository implements Repository{
             $attributesWhat[] = $this->classname::$primaryKey;
             $attributesWhere = array_keys($where);
             $sql = implode("AND ", array_map(fn($attr) => "$attr = :$attr", $attributesWhere));
-            $statement = $this->db->pdo->prepare("SELECT ".implode(',', $attributesWhat)." FROM $tableName ".($sql ? "WHERE $sql" : "").$filters);
+            $statement = $this->db->prepare("SELECT ".implode(',', $attributesWhat)." FROM $tableName ".($sql ? "WHERE $sql" : "").$filters);
             foreach($where as $key => $item){
                 $statement->bindValue(":$key", $item);
             }
@@ -125,6 +123,13 @@ class MysqlRepository implements Repository{
             if($currentElement){
                 $data[] = $currentElement;
             }
+        }
+    }
+    public function fillField($whereToFill, $whatToFill){
+        foreach($whereToFill as $entry){
+            foreach($whatToFill as $table => $property)
+                Application::$app->model->setTable($table);
+                $entry->{$property[1]} = Application::$app->model->findOne([$this->tablesToClasses[$table]::$primaryKey => $entry->{$property[0]}])->{$property[1]};
         }
     }
 }

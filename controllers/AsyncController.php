@@ -12,32 +12,68 @@ class AsyncController extends Controller{
         'descending' => 'DESC'
     ];
 
-    public function test($request){
+    public function routingCheck(){
         Application::$app->model->setTable('shots');
-        $shots = Application::$app->model->selectWhere(['author' => $_POST['page']], " ORDER BY created_at ".$this->valueMap[$_POST['value']]);
+        $shots = Application::$app->model->selectWhere([], " ORDER BY created_at DESC ");
+        Application::$app->model->fillField($shots, ['users' => ['author', 'nickname']]);
         $grid = Application::$app->templates->browse;
-        return $grid->show($shots)."</div>";
+        ob_start();
+        $grid->show($shots);
+        $arr = [
+            'value' => ob_get_clean()
+        ];
+        return json_encode($arr);
+    }
+
+    public function test($request){
+        $body = Application::$app->request->jsonGetBody();
+        $user = $body['user'];
+        $value = $body['value'];
+        Application::$app->model->setTable('shots');
+        $shots = Application::$app->model->selectWhere(['author' => $user], " ORDER BY created_at ".$this->valueMap[$value]);
+        Application::$app->model->fillField($shots, ['users' => ['author', 'nickname']]);
+        $grid = Application::$app->templates->browse;
+        ob_start();
+        $grid->show($shots);
+        $arr = array(
+            'html' => ob_get_clean()
+        );
+        return json_encode($arr);
     }
 
     public function comment($request){
+        $body = Application::$app->request->jsonGetBody();
         $comment = new \app\repository\CommentEntry();
-        $comment->comment = $_POST['value'];
-        $comment->post = $_POST['page'];
-        Application::$app->model->save($comment);
+        $comment->post = $body['post'];
+        if(Application::$app->service->user){
+            $comment->comment = $body['value'];
+            $comment->author = Application::$app->user->id;
+            Application::$app->model->save($comment);
+        }
         Application::$app->model->setTable('comments');
         $grid = Application::$app->templates->comments;
         $comments = Application::$app->model->selectWhere(['post' => $comment->post]);
+        Application::$app->model->fillField($comments, ['users' => ['author', 'nickname']]);
+        ob_start();
         $grid->getCount($comments);
-        return $grid->show($comments);
+        $grid->begin();
+        $grid->show($comments);
+        $grid->end();
+        $arr = array(
+            'html' => ob_get_clean()
+        );
+        return json_encode($arr);
     }
 
     public function loadMore($request){
-        $_POST = json_decode(file_get_contents('php://input'), true);
-        $limit = $_POST['limit'];
-        Application::$app->model->setTable('shots');
-        $shots = Application::$app->model->selectWhere([], " ORDER BY created_at DESC ", [0, $limit]);
-        $grid = Application::$app->templates->browse;
         ob_start();
+        $body = Application::$app->request->jsonGetBody();
+        $from = $body['from'];
+        $limit = $body['limit'];
+        Application::$app->model->setTable('shots');
+        $shots = Application::$app->model->selectWhere([], " ORDER BY created_at DESC ", [$from, $limit]);
+        Application::$app->model->fillField($shots, ['users' => ['author', 'nickname']]);
+        $grid = Application::$app->templates->browse;
         $grid->show($shots);
         $arr = array(
             'html' => ob_get_clean(),

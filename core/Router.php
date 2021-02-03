@@ -8,14 +8,17 @@ class Router{
     public const RULE_LOGGED_IN = 'logged_in';
     public const RULE_AUTHOR = 'author';
     public const RULE_SHOT_AUTHOR = 'shot_author';
+    public const RULE_NON_EMPTY_SUBPATH = 'non_empty_subpath';
 
     protected array $routes = [];
 
     protected array $rules = [
         '/upload' => [self::RULE_LOGGED_IN, self::RULE_AUTHOR],
-        '/edit' => [self::RULE_LOGGED_IN, self::RULE_SHOT_AUTHOR],
-        '/delete' => [self::RULE_LOGGED_IN, self::RULE_SHOT_AUTHOR],
-        '/comment' => [self::RULE_LOGGED_IN]
+        '/edit' => [self::RULE_NON_EMPTY_SUBPATH, self::RULE_LOGGED_IN, self::RULE_SHOT_AUTHOR],
+        '/delete' => [self::RULE_NON_EMPTY_SUBPATH, self::RULE_LOGGED_IN, self::RULE_SHOT_AUTHOR],
+        '/comment' => [self::RULE_LOGGED_IN],
+        '/user' => [self::RULE_NON_EMPTY_SUBPATH],
+        '/verify' => [self::RULE_NON_EMPTY_SUBPATH]
     ];
 
     public function __construct(Request $request, Response $response){
@@ -32,22 +35,25 @@ class Router{
     }
 
     public function grantAccess($page, $subPath = ""){
-        if(!$this->rules[$page]){
+        if(!in_array($page, array_keys($this->rules))){
             return true;
         }
         foreach($this->rules[$page] as $rule){
-            if($rule == self::RULE_LOGGED_IN && Application::isGuest()){
+            if($rule == self::RULE_LOGGED_IN && Application::$app->service->isGuest()){
                 return false;
             }
-            if($rule == self::RULE_AUTHOR && !Application::$app->user->isAuthor()){
+            if($rule == self::RULE_AUTHOR && !Application::$app->service->isAuthor()){
                 return false;
             }
             if($rule == self::RULE_SHOT_AUTHOR){
                 Application::$app->model->setTable('shots');
                 $shot = Application::$app->model->findOne(['id' => $subPath]);
-                if($shot->author != Application::$app->user->id){
+                if($shot->author != Application::$app->service->userId()){
                     return false;
                 }
+            }
+            if($rule == self::RULE_NON_EMPTY_SUBPATH && !$subPath){
+                return false;
             }
         }
         return true;
@@ -71,15 +77,23 @@ class Router{
             Application::$app->controller = new $callback[0]();
             $callback[0] = Application::$app->controller;
         }
-        if($this->grantAccess($path, $subPath[0])){
-            return call_user_func($callback, $this->request, $subPath);
+        if($subPath){
+            if($this->grantAccess($path, $subPath[0])){
+                return call_user_func($callback, $this->request, $subPath);
+            }
+            else{
+                Application::$app->response->redirect("/");
+                exit;
+            }
         }
         else{
-            Application::$app->response->redirect("/");
-            exit;
+            if($this->grantAccess($path)){
+                return call_user_func($callback, $this->request, $subPath);
+            }
+            else{
+                Application::$app->response->redirect("/");
+                exit;
+            }
         }
-        
     }
-
-    
 }

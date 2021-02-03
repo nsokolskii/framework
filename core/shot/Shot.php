@@ -10,17 +10,16 @@ class Shot{
         <div align='center'>
         <div class='header'>
         <div align='left'>
-        <a href='#' onClick='history.go(-1);'>< go back</a>&nbsp;
+        <a href='#' onClick='returnBack();'>< go back</a>&nbsp;
         %s
         </div>
         </div>
         </div>
         ", 
-        Application::$app->user->id == $data->author ? '<a href="/edit/'.$data->id.'" class="btn btn-primary">Edit post</a>' : "");
+        Application::$app->user && Application::$app->user->id == $data->author ? '<a href="/edit/'.$data->id.'" class="btn btn-primary">Edit post</a>' : "");
         echo sprintf("
         <div class='posthead' align='center'>
-        <div class='postimage' style='background-image: url(%s%s);'>
-        </div>
+        %s
         <div class='postinfo' align='left'>
         <div class='posttitle'>
         %s
@@ -34,8 +33,7 @@ class Shot{
         </div>
         </div>
         ", 
-        '/runtime/img/',
-        $data->image,
+        Application::$app->templates->currentImage->showQuiet($data),
         $data->title,
         $data->author,
         $data->nickname,

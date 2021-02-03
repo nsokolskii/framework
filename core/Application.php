@@ -5,7 +5,7 @@ namespace app\core;
 class Application{
     public static string $ROOT_DIR;
     public static string $DOMAIN_NAME;
-
+    public static $config = [];
     public $userClass;
     public Router $router;
     public Request $request;
@@ -15,6 +15,7 @@ class Application{
     public Controller $controller;
     public static View $view;
     public Session $session;
+    public Service $service;
     public $user;
     public $model;
     public Mailer $mailer;
@@ -26,6 +27,7 @@ class Application{
         $this->controller = $controller;
     }
     public function __construct($rootPath, array $config){
+        self::$config = $config;
         self::$DOMAIN_NAME = $config['domainName'];
         self::$ROOT_DIR = $rootPath;
         self::$app = $this;
@@ -40,37 +42,20 @@ class Application{
         $classesArgs = $config['modelClasses'];
         $this->model = new $model($classesArgs);
         $primaryValue = $this->session->get('user');
-        if($primaryValue){
-            $user = new $config['userClass'];
-            $primaryKey = $user::$primaryKey;
-            $this->model->setTable('users');
-            $this->user = $this->model->findOne([$primaryKey => $primaryValue]);
-        }
-        else{
-            $this->user = null;
-        }
+        // if($primaryValue){
+        //     $user = new $config['userClass'];
+        //     $primaryKey = $user::$primaryKey;
+        //     $this->model->setTable('users');
+        //     $this->user = $this->model->findOne([$primaryKey => $primaryValue]);
+        // }
+       
+        $this->service = new Service();
         $templateArgs = $config['templateClasses'];
         $this->templates = new Templates($templateArgs);
+        
     }
 
     public function run(){
         echo $this->router->resolve();
-    }
-
-    public function login($user){
-        $this->user = $user;
-        $primaryKey = $user::$primaryKey;
-        $primaryValue = $user->{$primaryKey};
-        $this->session->set('user', $primaryValue);
-        return true;
-    }
-
-    public function logout(){
-        $this->user = null;
-        $this->session->remove('user');
-    }
-
-    public static function isGuest(){
-        return !self::$app->user;
     }
 }

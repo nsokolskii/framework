@@ -2,7 +2,7 @@
 
 namespace app\repository;
 
-class Invitation{
+class InvitationEntry extends FieldEntry{
     public string $invitationCode = '';
     public static $attributes = ['invitationCode'];
     public static $primaryKey = 'id';

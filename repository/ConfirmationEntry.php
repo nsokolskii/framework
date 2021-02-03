@@ -2,7 +2,7 @@
 
 namespace app\repository;
 
-class Confirmation extends Restore{
+class ConfirmationEntry extends RestoreEntry{
     public $classname = 'confirmations';
     public function tableName(): string {
         return 'confirmations';

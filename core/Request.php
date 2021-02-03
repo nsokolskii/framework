@@ -38,6 +38,16 @@ class Request{
         }
         return $body;
     }
+    public function jsonGetBody(){
+        $_POST = json_decode(file_get_contents('php://input'), true);
+        $body = [];
+        if($this->method() === 'post'){
+            foreach ($_POST as $key => $value){
+                $body[$key] = $value;
+            }
+        }
+        return $body;
+    }
     public function getFiles(){
         $body = [];
         foreach($_FILES as $key => $value){

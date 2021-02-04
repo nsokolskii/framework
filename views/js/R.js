@@ -2,9 +2,14 @@ const Router = ReactRouterDOM.BrowserRouter;
 const Route = ReactRouterDOM.Route;
 const Switch = ReactRouterDOM.Switch;
 const Link = ReactRouterDOM.Link;
-
-document.getElementById('routeCheck').innerHTML = "dwqdwe";
   
+function renderAfterMounting(path){
+  switch(path){
+    case '': ReactDOM.render(<LoadMoreButton />, document.getElementById('loadMoreButton'));
+    case '/shots/8': ReactDOM.render(<CommentForm />, document.getElementById('commentForm'));
+  }
+}
+
 function App() {
     return (
       <Router>
@@ -12,28 +17,20 @@ function App() {
           <nav>
             <ul>
               <li>
-                <Link to="/">Home</Link>
+                <Link to="/shots/8">8-th shot</Link>
               </li>
               <li>
-                <Link to="/about">About</Link>
-              </li>
-              <li>
-                <Link to="/shots/43">Shots</Link>
+                <Link to="">All shots</Link>
               </li>
             </ul>
           </nav>
   
-          {/* A <Switch> looks through its children <Route>s and
-              renders the first one that matches the current URL. */}
           <Switch>
-            <Route path="/about">
-              <About />
+            <Route exact path="/shots/8">
+              <Content key={1} page="/shots/8" />
             </Route>
-            <Route path="/shots/43">
-              <Shots />
-            </Route>
-            <Route path="/">
-              <Home />
+            <Route exact path="">
+              <Content key={2} page="" />
             </Route>
           </Switch>
         </div>
@@ -49,24 +46,28 @@ function App() {
     return <h2>About</h2>;
   }
   
-class Shots extends React.Component{
+class Content extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            value: 11
+            value: '',
+            page: this.props.page
         }
-        getData('/routingCheck').then((data) => {
+        
+    }
+    componentDidMount(){
+      getData(this.state.page).then((data) => {
             this.setState({
-                value: data.value
-            })
+                value: data.html
+            });
+            renderAfterMounting(this.props.page);
         });
     }
     render(){
-        return <div>{this.state.value}</div>;
+      // document.getElementById('routeCheck').innerHTML = this.state.value;
+      return <div dangerouslySetInnerHTML={{__html: this.state.value}}></div>;
     }
 }
-
-
 
 ReactDOM.render(
     <App />,

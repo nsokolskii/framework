@@ -16,7 +16,7 @@ class View{
         return ob_get_clean();
     }
     
-    protected function renderOnlyView($view, $params){
+    public function renderOnlyView($view, $params = []){
         foreach($params as $key => $value){
             $$key = $value;
         }

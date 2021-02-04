@@ -13,6 +13,7 @@ class AsyncController extends Controller{
     ];
 
     public function routingCheck(){
+        $fetch = $_GET['fetch'];
         Application::$app->model->setTable('shots');
         $shots = Application::$app->model->selectWhere([], " ORDER BY created_at DESC ");
         Application::$app->model->fillField($shots, ['users' => ['author', 'nickname']]);

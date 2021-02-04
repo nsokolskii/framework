@@ -95,7 +95,6 @@ class MysqlRepository implements Repository{
         foreach($what as $key => $item){
             $statement->bindValue(":$key", $item);
         }
-        var_dump($statement);
         $statement->execute();
         return true;
     }

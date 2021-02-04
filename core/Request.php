@@ -13,7 +13,7 @@ class Request{
             return $parsedPath;
         }
         
-        return substr($path, 0, $pos);
+        return explode('/', substr($path, 0, $pos));
     }
     public function method(){
         return strtolower($_SERVER['REQUEST_METHOD']);

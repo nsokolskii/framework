@@ -35,10 +35,12 @@ use app\core\Application;
 
       </ul>
       <ul class="navbar-nav ml-auto">
+      <div id="searchField"></div>
         <?php if (Application::$app->service->isGuest()) : ?>
           <a class="nav-link" href="/login">Log in<span class="sr-only"></span></a>
           <a class="nav-link" href="/register">Register<span class="sr-only"></span></a>
         <?php else : ?>
+          
           <?php if (!Application::$app->user->isConfirmed()) : ?>
             <button type="button" class="btn btn-outline-danger" style="margin-right: 10px;">Confirm your email</button>
           <?php endif; ?>

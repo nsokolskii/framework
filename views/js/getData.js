@@ -1,6 +1,6 @@
-async function getData(url = '') {
+async function getData(url = '', query = '') {
     const response = await fetch(url + "?" + new URLSearchParams({
-        "fetch": 'value'
+        "fetch": 'value',
     }), {
         method: 'GET',
         headers: {

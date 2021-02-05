@@ -103,26 +103,34 @@ class MysqlRepository implements Repository{
         return $this->selectWhere([]);
     }
 
-    public function search($where, $what, $filters = ""){
+    public function search($tables, $where, $filters = ""){
         $data = [];
-        foreach($where as $table){
+        foreach($tables as $table){
+            $this->setTable($table);
             $tableName = $this->table;
             $attributesWhat = $this->classname::$attributes;
             $attributesWhat[] = $this->classname::$primaryKey;
-            $attributesWhere = array_keys($where);
-            $sql = implode("AND ", array_map(fn($attr) => "$attr = :$attr", $attributesWhere));
+            $attributesLike = $where['attributes'][$table];
+            $query = $where['query'];
+            $query = explode("%20", $query);
+            $query = implode(" ", $query);  
+            $sql = implode(" OR ", array_map(fn($attr) => "$attr LIKE :$attr", $attributesLike));
             $statement = $this->db->prepare("SELECT ".implode(',', $attributesWhat)." FROM $tableName ".($sql ? "WHERE $sql" : "").$filters);
-            foreach($where as $key => $item){
-                $statement->bindValue(":$key", $item);
+            
+            foreach($attributesLike as $key){
+                $statement->bindValue(":$key", "%".$query."%");
             }
             $statement->execute();
+            
+            while($currentElement = $statement->fetchObject($this->classname)){
+                if($currentElement){
+                    $data[$table][] = $currentElement;
+                }
+            }
+
         }
         
-        while($currentElement = $statement->fetchObject($this->classname)){
-            if($currentElement){
-                $data[] = $currentElement;
-            }
-        }
+        return $data;
     }
     public function fillField($whereToFill, $whatToFill){
         foreach($whereToFill as $entry){

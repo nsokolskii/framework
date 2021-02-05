@@ -60,7 +60,16 @@ class SiteController extends Controller{
         else Application::$app->response->redirect("/");
     }
 
-    public function search(){
-        return $this->render('search');
+    public function search($request, $path){
+        $query = $path[0] ?? "";
+        Application::$app->model->setTable('shots');
+        $result = Application::$app->model->search(['shots', 'users'], ['query' => $query, 'attributes' => ['shots' => ['title', 'description'], 'users' => ['nickname']]], '');
+        $params = [
+            'shots' => $result['shots'] ?? null,
+            'users' => $result['users'] ?? null
+        ];
+        
+        return $this->render('search', $params);
+        
     }
 }

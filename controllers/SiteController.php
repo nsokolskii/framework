@@ -33,6 +33,7 @@ class SiteController extends Controller{
         $params = [
             'shots' => $shots
         ];
+        Application::$app->session->set('backRoute', '/shots');
         return $this->render('browse', $params);
     }
 
@@ -55,21 +56,33 @@ class SiteController extends Controller{
                 'shots' => $shots,
                 'user' => $user,
             ];
+            Application::$app->session->set('backRoute', '/user/'.$userId);
             return $this->render('user', $params);
         }
         else Application::$app->response->redirect("/");
     }
 
     public function search($request, $path){
-        $query = $path[0] ?? "";
+        $searchField = new \app\repository\SearchEntry();
+        if($request->isPost()){
+            $searchField->loadData($request->getBody());
+            $query = $searchField->query;
+        }
+        else{
+            $query = $path[0] ?? "";
+        }
         Application::$app->model->setTable('shots');
-        $result = Application::$app->model->search(['shots', 'users'], ['query' => $query, 'attributes' => ['shots' => ['title', 'description'], 'users' => ['nickname']]], '');
+        $result = Application::$app->model->search(['shots', 'users', 'comments'], 
+        ['query' => $query, 'attributes' => ['shots' => ['title', 'description'], 'users' => ['nickname'], 'comments' => ['comment']]], ' LIMIT 12 ');
+        if(in_array('shots', array_keys($result))){
+            Application::$app->model->fillField($result['shots'], ['users' => ['author', 'nickname']]);
+        }
         $params = [
             'shots' => $result['shots'] ?? null,
-            'users' => $result['users'] ?? null
+            'users' => $result['users'] ?? null,
+            'comments' => $result['comments'] ?? null,
+            'model' => $searchField
         ];
-        
         return $this->render('search', $params);
-        
     }
 }

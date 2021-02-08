@@ -59,9 +59,9 @@ class CommentForm extends React.Component {
     }
     render() {
       return (
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
+        <div className="container">
+            <div className="row">
+                <div className="col-md-12">
                     <form className="form-inline" onSubmit={this.handleSubmit}>
                         <input type="text" name="comment" value={this.state.value} className={this.state.invalid} onChange={this.handleChange} onFocus={this.handleFocus} onBlur={this.handleBlur} />
                         <input type="submit" value="Submit" className="btn btn-primary" />

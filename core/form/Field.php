@@ -26,6 +26,7 @@ class Field{
             'title' => 'Shot title',
             'description' => 'Shot description',
             'image' => 'Image',
+            'query' => 'Search'
         ];
     }
 

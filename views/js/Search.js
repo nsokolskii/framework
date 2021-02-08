@@ -6,7 +6,7 @@ class SearchField extends React.Component {
         pageId = pageId.replace("%20", " ");
         super(props);
         this.state = {
-          value: pageId,
+          value: pageId || this.default,
           invalid: "flex-fill mr-2 form-control",
           invalidInfo: ""
         };
@@ -60,13 +60,18 @@ class SearchField extends React.Component {
             this.setState({value: this.default});
         }
     }
+
+    componentDidMount(){
+        this.nameInput.focus(); 
+    }
+
     render() {
       return (
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12" style={{paddingRight: 5}}>
                     <form className="form-inline" onSubmit={this.handleSubmit}>
-                        <input type="text" name="comment" value={this.state.value} className={this.state.invalid} onChange={this.handleChange} onFocus={this.handleFocus} onBlur={this.handleBlur} />
+                        <input type="text" ref={(input) => { this.nameInput = input; }}  name="comment" value={this.state.value} className={this.state.invalid} onChange={this.handleChange} onFocus={this.handleFocus} onBlur={this.handleBlur} />
                         
                     </form>
                 </div>

@@ -5,10 +5,8 @@ namespace app\core\grid;
 abstract class Grid{
     
     public abstract function getClass() : string;
-    public function show($data, $paginate = 0){
-        //echo '<span id="res">';
+    public function show($data){
         $this->generateGrid($data);
-        //echo '</span>';
     }
 
     public function begin(){

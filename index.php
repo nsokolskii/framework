@@ -1,10 +1,6 @@
 <?php
 require_once "autoloader.php";
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 use app\controllers\SiteController;
 use app\controllers\AsyncController;
 use app\controllers\EditController;
@@ -26,6 +22,7 @@ $config = [
     'templateClasses' => [
         'comments' => \app\core\grid\CommentGrid::class,
         'browse' => \app\core\grid\BrowseGrid::class,
+        'users' => \app\core\grid\UsersGrid::class,
         'form' => \app\core\form\Form::class,
         'shot' => \app\core\shot\Shot::class,
         'currentImage' => \app\core\shot\CurrentImage::class

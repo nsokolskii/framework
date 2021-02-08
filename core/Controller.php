@@ -13,7 +13,8 @@ class Controller{
             ob_start();
             echo Application::$view->renderOnlyView($view, $params);
             $arr = [
-                'html' => ob_get_clean()
+                'html' => ob_get_clean(),
+                'jsParams' => $params['js'] ?? null
             ];
             return json_encode($arr);
         }

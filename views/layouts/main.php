@@ -1,6 +1,7 @@
 <?php
 
 use app\core\Application;
+
 ?>
 
 <!doctype html>
@@ -35,18 +36,20 @@ use app\core\Application;
 
       </ul>
       <ul class="navbar-nav ml-auto">
-      <div id="searchField"></div>
+
         <?php if (Application::$app->service->isGuest()) : ?>
+          <a class="nav-link" href="/search/">Search<span class="sr-only"></span></a>
           <a class="nav-link" href="/login">Log in<span class="sr-only"></span></a>
           <a class="nav-link" href="/register">Register<span class="sr-only"></span></a>
         <?php else : ?>
-          
+
           <?php if (!Application::$app->user->isConfirmed()) : ?>
             <button type="button" class="btn btn-outline-danger" style="margin-right: 10px;">Confirm your email</button>
           <?php endif; ?>
           <?php if (Application::$app->user->isAuthor()) : ?>
             <a href="/upload" class="btn btn-primary" style="margin-right: 10px;">Post a shot</a>
           <?php endif; ?>
+          <a class="nav-link" href="/search/">Search<span class="sr-only"></span></a>
           <a class="nav-link" href="/user/<?php echo Application::$app->user->id; ?>"><?php echo Application::$app->user->getDisplayName(); ?><span class="sr-only"></span></a>
           <a class="nav-link" href="/logout">Log out<span class="sr-only"></span></a>
         <?php endif; ?>
@@ -66,7 +69,7 @@ use app\core\Application;
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-  
+
   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
   <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>

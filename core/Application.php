@@ -41,18 +41,9 @@ class Application{
         $model = $config['model'];
         $classesArgs = $config['modelClasses'];
         $this->model = new $model($classesArgs);
-        $primaryValue = $this->session->get('user');
-        // if($primaryValue){
-        //     $user = new $config['userClass'];
-        //     $primaryKey = $user::$primaryKey;
-        //     $this->model->setTable('users');
-        //     $this->user = $this->model->findOne([$primaryKey => $primaryValue]);
-        // }
-       
         $this->service = new Service();
         $templateArgs = $config['templateClasses'];
         $this->templates = new Templates($templateArgs);
-        
     }
 
     public function run(){

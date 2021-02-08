@@ -32,7 +32,7 @@ class LoadMoreButton extends React.Component {
 
     render() {
         return (
-            <button class="btn btn-primary" onClick={this.handleClick} disabled={this.state.disabled}>{this.state.value}</button>
+            <button className="btn btn-primary" onClick={this.handleClick} disabled={this.state.disabled}>{this.state.value}</button>
         );
     }
 }

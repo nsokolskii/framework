@@ -2,7 +2,6 @@
     <div class="header" align="left">Edit a shot &nbsp;<span id="deleteButton"></span></div>
 </div>
 <div class="comments">
-
     <?php
 
     use app\core\Application;

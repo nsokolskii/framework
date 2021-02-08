@@ -30,7 +30,7 @@ class DeleteButton extends React.Component {
 
     render() {
       return (
-        <a href={this.state.href} class="btn btn-danger" onBlur={this.handleBlur} onClick={this.handleClick}>{this.state.value}</a>
+        <a href={this.state.href} className="btn btn-danger" onBlur={this.handleBlur} onClick={this.handleClick}>{this.state.value}</a>
       );
     }
   }

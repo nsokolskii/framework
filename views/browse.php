@@ -1,4 +1,3 @@
-<div id="c"></div>
 <div id="routeCheck"><div align="center">
     <div class="header" align="left">Shots</div>
 </div>
@@ -18,9 +17,6 @@
     </div>
 </div>
 </div>
-
 <script type="text/babel" src="/views/js/getData.js"></script>
-<script type="text/babel" src="/views/js/R.js"></script>
 <script type="text/babel" src="/views/js/postData.js"></script>
 <script type="text/babel" src="/views/js/LoadMoreButton.js"></script>
-<script type="text/babel" src="/views/js/Comment.js"></script>

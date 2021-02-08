@@ -24,5 +24,5 @@ use app\core\Application;
 </div>
 <?php if ($shots) : ?>
     <script type="text/babel" src="/views/js/postData.js"></script>
-    <script type="text/babel" src="/views/js/root.js"></script>
+    <script type="text/babel" src="/views/js/SortForm.js"></script>
 <?php endif; ?>

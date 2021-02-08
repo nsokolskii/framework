@@ -10,12 +10,13 @@ class Shot{
         <div align='center'>
         <div class='header'>
         <div align='left'>
-        <a href='#' onClick='returnBack();'>< go back</a>&nbsp;
+        <a href='%s'>< go back</a>&nbsp;
         %s
         </div>
         </div>
         </div>
         ", 
+        Application::$app->session->get('backRoute') ?? "/shots",
         Application::$app->user && Application::$app->user->id == $data->author ? '<a href="/edit/'.$data->id.'" class="btn btn-primary">Edit post</a>' : "");
         echo sprintf("
         <div class='posthead' align='center'>
@@ -32,7 +33,7 @@ class Shot{
         </div>
         </div>
         </div>
-        ", 
+        ",
         Application::$app->templates->currentImage->showQuiet($data),
         $data->title,
         $data->author,

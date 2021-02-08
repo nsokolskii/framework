@@ -21,6 +21,7 @@ $config = [
     ],
     'templateClasses' => [
         'comments' => \app\core\grid\CommentGrid::class,
+        'commentsSearch' => \app\core\grid\CommentSearchGrid::class,
         'browse' => \app\core\grid\BrowseGrid::class,
         'users' => \app\core\grid\UsersGrid::class,
         'form' => \app\core\form\Form::class,

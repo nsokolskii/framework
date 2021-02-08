@@ -52,3 +52,11 @@ body {
     font-size:10px;
     opacity:0.7;
 }
+
+.commentSearchWrapper{
+    font-weight:500;
+}
+
+.commentSearchTitle {
+    font-weight: bold;
+}

@@ -77,6 +77,10 @@ class SiteController extends Controller{
         if(in_array('shots', array_keys($result))){
             Application::$app->model->fillField($result['shots'], ['users' => ['author', 'nickname']]);
         }
+        if(in_array('comments', array_keys($result))){
+            Application::$app->model->fillField($result['comments'], ['users' => ['author', 'nickname']]);
+            Application::$app->model->fillField($result['comments'], ['shots' => ['post', 'title']]);
+        }
         $params = [
             'shots' => $result['shots'] ?? null,
             'users' => $result['users'] ?? null,

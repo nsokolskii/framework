@@ -52,6 +52,21 @@ use app\core\Application;
             <div class="header" align="left" style="opacity: 0.5">No users found</div>
         </div>
     <?php endif; ?>
+    <?php if ($comments) : ?>
+        <div align="center">
+            <div class="header" align="left">Comments</div>
+        </div>
+        <?php
+        $grid = Application::$app->templates->commentsSearch;
+        $grid->begin();
+        $grid->show($comments);
+        $grid->end();
+        ?>
+    <?php else : ?>
+        <div align="center">
+            <div class="header" align="left" style="opacity: 0.5">No users found</div>
+        </div>
+    <?php endif; ?>
 </div>
 
 <?php if (!Application::$app->service->isGuest()) : ?>

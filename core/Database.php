@@ -67,4 +67,13 @@ class Database{
     protected function log($message){
         echo '['.date('Y-m-d H:i:s').'] - '.$message.PHP_EOL;
     }
+
+    public function generateDummyEntries(){
+        $i = 1;
+        while($i <= 40){
+            $statement = $this->prepare("INSERT INTO shots (title, description, author, image) VALUES ('Test Title $i', 'Test Description $i', '1', 'dummy/$i.jpg')");
+            $statement->execute();
+            $i = $i + 1;
+        }
+    }
 }

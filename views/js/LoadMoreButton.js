@@ -12,6 +12,7 @@ class LoadMoreButton extends React.Component {
             limit: this.limit,
             value: this.default,
             search: {table: this.props.table || 0, query: this.props.query || 0},
+            user: this.props.user || 0,
             disabled: false
         };
         console.log(this.state.search);
@@ -19,7 +20,8 @@ class LoadMoreButton extends React.Component {
     }
 
     handleClick(event) {
-        postData("/loadMore", { "limit": this.state.limit, "from": this.state.from, "table": this.state.search.table, "query": this.state.search.query}).then((data) => {
+        postData("/loadMore", { "limit": this.state.limit, "from": this.state.from, "table": this.state.search.table, "query": this.state.search.query,
+        "user": this.state.user}).then((data) => {
             this.loadedHtml += data.html;
             document.querySelector('.wrapper').innerHTML = this.loadedHtml;
             this.setState({

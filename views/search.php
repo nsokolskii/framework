@@ -3,7 +3,7 @@
 use app\core\Application; 
 
 ?>
-
+<div id="loadMoreCheck"></div>
 <?php if (Application::$app->service->isGuest()) : ?>
     <div class="comments" style="padding-top:10px;">
         <?php
@@ -30,8 +30,13 @@ use app\core\Application;
         $grid = Application::$app->templates->browse;
         $grid->begin();
         $grid->show($shots);
-        $grid->end(); 
+        $grid->end();
         ?>
+            
+            <div align="center">
+                <div id="loadMoreSearchButton"></div>
+            </div>
+            
     <?php else : ?>
         <div align="center">
             <div class="header" align="left" style="opacity: 0.5">No shots found</div>

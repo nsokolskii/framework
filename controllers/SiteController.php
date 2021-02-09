@@ -73,7 +73,7 @@ class SiteController extends Controller{
         }
         Application::$app->model->setTable('shots');
         $result = Application::$app->model->search(['shots', 'users', 'comments'], 
-        ['query' => $query, 'attributes' => ['shots' => ['title', 'description'], 'users' => ['nickname'], 'comments' => ['comment']]], ' LIMIT 12 ');
+        ['query' => $query, 'attributes' => ['shots' => ['title', 'description'], 'users' => ['nickname'], 'comments' => ['comment']]], ' ORDER BY created_at DESC LIMIT 12 ');
         if(in_array('shots', array_keys($result))){
             Application::$app->model->fillField($result['shots'], ['users' => ['author', 'nickname']]);
         }

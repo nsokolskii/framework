@@ -27,6 +27,11 @@ class SearchField extends React.Component {
                 this.setState({
                     
                 });
+                let wrapper = document.querySelector('.wrapper');
+                if(this.state.value && wrapper && wrapper.childElementCount == 12){
+                    ReactDOM.render(<LoadMoreButton table={'shots'} query={this.state.value}/>, document.getElementById('loadMoreSearchButton'))
+                }
+                console.log(parsedValue)
                 window.history.pushState('page2', 'Search results for'+parsedValue, parsedValue || "./");
             });
         }
@@ -62,7 +67,12 @@ class SearchField extends React.Component {
     }
 
     componentDidMount(){
-        this.nameInput.focus(); 
+        let wrapper = document.querySelector('.wrapper');
+        if(this.state.value != '' && this.state.value != this.default && wrapper && wrapper.childElementCount == 12){
+            ReactDOM.render(<LoadMoreButton table={'shots'} query={this.state.value}/>, document.getElementById('loadMoreSearchButton'))
+        }
+        this.nameInput.focus();
+        
     }
 
     render() {

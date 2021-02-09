@@ -71,9 +71,22 @@ class AsyncController extends Controller{
         $body = Application::$app->request->jsonGetBody();
         $from = $body['from'];
         $limit = $body['limit'];
-        Application::$app->model->setTable('shots');
-        $shots = Application::$app->model->selectWhere([], " ORDER BY created_at DESC ", [$from, $limit]);
-        Application::$app->model->fillField($shots, ['users' => ['author', 'nickname']]);
+        $table = $body['table'] ?? 0;
+        $query = $body['query'] ?? 0;
+        if($table && $query){
+            Application::$app->model->setTable($table);
+            $shots = Application::$app->model->search([$table], ['query' => $query, 'attributes' => [$table => ['title', 'description']]], " ORDER BY created_at DESC LIMIT $from, $limit ");
+            if($shots){
+                $shots = $shots[$table];
+                Application::$app->model->fillField($shots, ['users' => ['author', 'nickname']]);
+            }
+        }
+        else{
+            Application::$app->model->setTable('shots');
+            $shots = Application::$app->model->selectWhere([], " ORDER BY created_at DESC ", [$from, $limit]);
+            Application::$app->model->fillField($shots, ['users' => ['author', 'nickname']]);
+        }
+        
         $grid = Application::$app->templates->browse;
         $grid->show($shots);
         $arr = array(

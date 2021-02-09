@@ -1,8 +1,8 @@
 class LoadMoreButton extends React.Component {
     default = 'Load more';
     step = 5;
-    limit = 5;
-    from = 10;
+    limit = 10;
+    from = document.querySelector('.wrapper').childElementCount;
     loadedHtml = document.querySelector('.wrapper').innerHTML;
 
     constructor(props) {
@@ -11,13 +11,15 @@ class LoadMoreButton extends React.Component {
             from: this.from,
             limit: this.limit,
             value: this.default,
+            search: {table: this.props.table || 0, query: this.props.query || 0},
             disabled: false
         };
+        console.log(this.state.search);
         this.handleClick = this.handleClick.bind(this);
     }
 
     handleClick(event) {
-        postData("/loadMore", { "limit": this.state.limit, "from": this.state.from }).then((data) => {
+        postData("/loadMore", { "limit": this.state.limit, "from": this.state.from, "table": this.state.search.table, "query": this.state.search.query}).then((data) => {
             this.loadedHtml += data.html;
             document.querySelector('.wrapper').innerHTML = this.loadedHtml;
             this.setState({
@@ -32,7 +34,9 @@ class LoadMoreButton extends React.Component {
 
     render() {
         return (
+            <div style={{paddingTop:20}}>
             <button className="btn btn-primary" onClick={this.handleClick} disabled={this.state.disabled}>{this.state.value}</button>
+            </div>
         );
     }
 }

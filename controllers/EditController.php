@@ -73,6 +73,8 @@ class EditController extends Controller{
         $shot = Application::$app->model->findOne(['id' => $shotId]);
         if($shot){
             Application::$app->model->removeOne(['id' => $shotId]);
+            Application::$app->model->setTable('comments');
+            Application::$app->model->removeOne(['post' => $shotId]);
             Application::$app->session->setFlash('success', "Post removed");
         }
         Application::$app->response->redirect("/user/".Application::$app->user->id);
